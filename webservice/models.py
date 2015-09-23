@@ -19,6 +19,7 @@ class Product(models.Model):
     prod_datebuy = models.DateField()
     prod_stock = models.IntegerField()
     prod_lastmodification = models.DateTimeField(auto_now=True)
+    prod_image = models.TextField()
 
     user = models.ManyToManyField(User)
     tva = models.ForeignKey(TVA)

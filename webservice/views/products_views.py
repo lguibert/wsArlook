@@ -13,6 +13,11 @@ def get_products(request):
     products = Product.objects.all()
     return send_response(serialize(products))
 
+
+def get_product(request, uuid):
+    product = Product.objects.filter(prod_uuid=uuid)
+    return send_response(serialize(product))
+
 @csrf_exempt
 def new_product(request):
     if request.method == 'POST':
@@ -25,6 +30,7 @@ def new_product(request):
         product.prod_buyprice = newprod['buyprice']
         product.prod_datebuy = newprod['datebuy'].split("T")[0]
         product.prod_stock = newprod['stock']
+        product.prod_image = newprod['image']
         product.tva_id = 1
 
         try:
