@@ -19,4 +19,7 @@ urlpatterns = patterns('webservice.views',
                        url(r'products/add?', 'new_product'),
                        url(r'products/?', 'get_products'),
                        url(r'product/(?P<uuid>[a-zA-Z0-9]{1,})/?', 'get_product'),
+
+                       url(r'tva/?', 'get_tva'),
+
                        )

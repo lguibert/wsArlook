@@ -76,6 +76,11 @@
       <index name="user_id" unique="true" columns="permission_id"/>
       <index name="auth_user_user_perm_permission_id_3d7071f0_fk_auth_permission_id" unique="false" columns="permission_id"/>
     </table>
+    <table name="corsheaders_corsmodel" schema="" catalog="arlook" type="TABLE">
+      <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="cors" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12"/>
+      <primary-key name="PRIMARY" columns="id"/>
+    </table>
     <table name="django_admin_log" schema="" catalog="arlook" type="TABLE">
       <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
       <column name="action_time" sqlType="DATETIME" precision="19" scale="0" nullable="false" jdbcType="93"/>
@@ -148,6 +153,7 @@
       <column name="prod_lastmodification" sqlType="DATETIME" precision="19" scale="0" nullable="false" jdbcType="93"/>
       <column name="tva_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
       <column name="prod_uuid" sqlType="CHAR" precision="32" scale="0" nullable="false" jdbcType="1"/>
+      <column name="prod_image" sqlType="LONGTEXT" precision="2147483647" scale="0" nullable="false" jdbcType="-1"/>
       <primary-key name="PRIMARY" columns="id"/>
       <foreign-key name="webservice_product_tva_id_7e929f7b_fk_webservice_tva_id" columns="tva_id" ref-table="webservice_tva" ref-schema="" ref-catalog="arlook" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
       <exported-key name="webservice_product__product_id_190d4678_fk_webservice_product_id" table="webservice_product_user" schema="" catalog="arlook" columns="product_id"/>
@@ -167,8 +173,10 @@
     <table name="webservice_tva" schema="" catalog="arlook" type="TABLE">
       <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
       <column name="tva_value" sqlType="DECIMAL" precision="4" scale="2" nullable="false" jdbcType="3"/>
+      <column name="tva_uuid" sqlType="CHAR" precision="32" scale="0" nullable="false" jdbcType="1"/>
       <primary-key name="PRIMARY" columns="id"/>
       <exported-key name="webservice_product_tva_id_7e929f7b_fk_webservice_tva_id" table="webservice_product" schema="" catalog="arlook" columns="tva_id"/>
+      <index name="tva_uuid" unique="true" columns="tva_uuid"/>
     </table>
   </data-source>
   <data-source name="Django default2" uuid="334aa16d-66b3-477f-ab8b-67040e3e5036">

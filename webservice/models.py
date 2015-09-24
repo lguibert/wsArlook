@@ -5,6 +5,7 @@ from uuidfield import UUIDField
 
 class TVA(models.Model):
     tva_value = models.DecimalField(max_digits=4, decimal_places=2)
+    tva_uuid = UUIDField(auto=True)
 
     def __unicode__(self):
         return self.tva_value
