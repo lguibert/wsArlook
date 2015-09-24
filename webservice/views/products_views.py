@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import json
-from webservice.models import Product, TVA
+from webservice.models import Product
 from django.views.decorators.csrf import csrf_exempt
 from general_views import send_response, serialize
 from tva_views import get_tva_uuid
@@ -46,10 +46,8 @@ def new_product(request):
 
         try:
             product.save()
-            print "ah !"
             return send_response(True)
         except:
-            print "oh..."
             return send_response(False, 500)
     else:
         return send_response("nothing here for you")

@@ -32,12 +32,13 @@ class Product(models.Model):
 class Client(models.Model):
     client_firstname = models.CharField(max_length=50)
     client_lastname = models.CharField(max_length=50)
-    client_phone = models.CharField(max_length=20)
-    client_address = models.TextField()
-    client_town = models.CharField(max_length=40)
-    client_zipcode = models.CharField(max_length=10)
-    client_email = models.CharField(max_length=100)
+    client_phone = models.CharField(max_length=20, null=True)
+    client_address = models.TextField(null=True)
+    client_town = models.CharField(max_length=40, null=True)
+    client_zipcode = models.CharField(max_length=10, null=True)
+    client_email = models.CharField(max_length=100, null=True)
     client_lastmodification = models.DateTimeField(auto_now=True)
+    client_uuid = UUIDField(auto=True)
 
     user = models.ManyToManyField(User)
 

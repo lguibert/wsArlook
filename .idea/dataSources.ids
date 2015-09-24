@@ -144,7 +144,7 @@
     </table>
     <table name="webservice_product" schema="" catalog="arlook" type="TABLE">
       <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
-      <column name="prod_name" sqlType="VARCHAR" precision="50" scale="0" nullable="false" jdbcType="12"/>
+      <column name="prod_name" sqlType="VARCHAR" precision="250" scale="0" nullable="false" jdbcType="12"/>
       <column name="prod_description" sqlType="LONGTEXT" precision="2147483647" scale="0" nullable="false" jdbcType="-1"/>
       <column name="prod_sellprice" sqlType="DECIMAL" precision="6" scale="2" nullable="false" jdbcType="3"/>
       <column name="prod_buyprice" sqlType="DECIMAL" precision="6" scale="2" nullable="false" jdbcType="3"/>

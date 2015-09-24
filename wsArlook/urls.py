@@ -22,4 +22,8 @@ urlpatterns = patterns('webservice.views',
 
                        url(r'tva/?', 'get_tva'),
 
+                       url(r'clients/add?', 'new_client'),
+                       url(r'clients/?', 'get_clients'),
+                       url(r'client/(?P<uuid>[a-zA-Z0-9]{1,})/?', 'get_client'),
+
                        )
