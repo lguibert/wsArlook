@@ -12,7 +12,7 @@ def login(request):
         user = authenticate(username=data['username'], password=data['password'])
         if user is not None:
             if user.is_superuser:
-                return send_response([user.username, user.password, "user"])
+                return send_response([user.username, user.password, "admin"])
             else:
                 return send_response([user.username, user.password, "user"])
         else:
