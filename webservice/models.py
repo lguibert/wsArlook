@@ -14,7 +14,6 @@ class TVA(models.Model):
 class Product(models.Model):
     prod_name = models.CharField(max_length=50)
     prod_uuid = UUIDField(auto=True)
-    prod_description = models.TextField()
     prod_sellprice = models.DecimalField(max_digits=6, decimal_places=2)
     prod_buyprice = models.DecimalField(max_digits=6, decimal_places=2)
     prod_datebuy = models.DateField()

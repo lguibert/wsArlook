@@ -26,4 +26,6 @@ urlpatterns = patterns('webservice.views',
                        url(r'clients/?', 'get_clients'),
                        url(r'client/(?P<uuid>[a-zA-Z0-9]{1,})/?', 'get_client'),
 
+                       url(r'login/?', 'login'),
+
                        )

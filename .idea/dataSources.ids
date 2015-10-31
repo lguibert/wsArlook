@@ -123,14 +123,16 @@
       <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
       <column name="client_firstname" sqlType="VARCHAR" precision="50" scale="0" nullable="false" jdbcType="12"/>
       <column name="client_lastname" sqlType="VARCHAR" precision="50" scale="0" nullable="false" jdbcType="12"/>
-      <column name="client_phone" sqlType="VARCHAR" precision="20" scale="0" nullable="false" jdbcType="12"/>
-      <column name="client_address" sqlType="LONGTEXT" precision="2147483647" scale="0" nullable="false" jdbcType="-1"/>
-      <column name="client_town" sqlType="VARCHAR" precision="40" scale="0" nullable="false" jdbcType="12"/>
-      <column name="client_zipcode" sqlType="VARCHAR" precision="10" scale="0" nullable="false" jdbcType="12"/>
-      <column name="client_email" sqlType="VARCHAR" precision="100" scale="0" nullable="false" jdbcType="12"/>
+      <column name="client_phone" sqlType="VARCHAR" precision="20" scale="0" nullable="true" jdbcType="12"/>
+      <column name="client_address" sqlType="LONGTEXT" precision="2147483647" scale="0" nullable="true" jdbcType="-1"/>
+      <column name="client_town" sqlType="VARCHAR" precision="40" scale="0" nullable="true" jdbcType="12"/>
+      <column name="client_zipcode" sqlType="VARCHAR" precision="10" scale="0" nullable="true" jdbcType="12"/>
+      <column name="client_email" sqlType="VARCHAR" precision="100" scale="0" nullable="true" jdbcType="12"/>
       <column name="client_lastmodification" sqlType="DATETIME" precision="19" scale="0" nullable="false" jdbcType="93"/>
+      <column name="client_uuid" sqlType="CHAR" precision="32" scale="0" nullable="false" jdbcType="1"/>
       <primary-key name="PRIMARY" columns="id"/>
       <exported-key name="webservice_client_use_client_id_3830e6d0_fk_webservice_client_id" table="webservice_client_user" schema="" catalog="arlook" columns="client_id"/>
+      <index name="client_uuid" unique="true" columns="client_uuid"/>
     </table>
     <table name="webservice_client_user" schema="" catalog="arlook" type="TABLE">
       <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
@@ -145,7 +147,6 @@
     <table name="webservice_product" schema="" catalog="arlook" type="TABLE">
       <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
       <column name="prod_name" sqlType="VARCHAR" precision="250" scale="0" nullable="false" jdbcType="12"/>
-      <column name="prod_description" sqlType="LONGTEXT" precision="2147483647" scale="0" nullable="false" jdbcType="-1"/>
       <column name="prod_sellprice" sqlType="DECIMAL" precision="6" scale="2" nullable="false" jdbcType="3"/>
       <column name="prod_buyprice" sqlType="DECIMAL" precision="6" scale="2" nullable="false" jdbcType="3"/>
       <column name="prod_datebuy" sqlType="DATE" precision="10" scale="0" nullable="false" jdbcType="91"/>
