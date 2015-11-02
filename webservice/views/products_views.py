@@ -11,22 +11,6 @@ def get_products(request):
     return send_response(serialize(products))
 
 
-def get_product(request, uuid):
-    product = Product.objects.get(prod_uuid=uuid)
-
-    tab = {"prod_name": product.prod_name,
-           "prod_sellprice": str(product.prod_sellprice),
-           "prod_buyprice": str(product.prod_buyprice),
-           "prod_datebuy": str(product.prod_datebuy),
-           "prod_stock": product.prod_stock,
-           "prod_image": product.prod_image,
-           "prod_tva_value": str(product.tva.tva_value),
-           "prod_lastmodification": str(product.prod_lastmodification),
-           }
-
-    return send_response(tab)
-
-
 @csrf_exempt
 def new_product(request):
     if request.method == 'POST':
@@ -47,5 +31,38 @@ def new_product(request):
             return send_response(True)
         except:
             return send_response(False, 500)
-    else:
-        return send_response("nothing here for you")
+
+
+@csrf_exempt
+def in_product(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+
+        if update_product(data[0], data[1], "+"):
+            return send_response(True)
+        else:
+            return send_response("Erreur lors de la mise à jour du produit.", 500)
+
+
+@csrf_exempt
+def out_product(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        if update_product(data[0], data[1], "-"):
+            return send_response(True)
+        else:
+            return send_response("Erreur lors de la mise à jour du produit.", 500)
+
+
+def update_product(uuid, quantity, operation):
+    try:
+        prod = Product.objects.get(prod_uuid=uuid)
+        if operation == "+":
+            prod.prod_stock = int(prod.prod_stock) + int(quantity)
+        elif operation == "-":
+            prod.prod_stock = int(prod.prod_stock) - int(quantity)
+
+        prod.save()
+        return True
+    except:
+        return False

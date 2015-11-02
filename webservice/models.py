@@ -27,6 +27,10 @@ class Product(models.Model):
     def __unicode__(self):
         return self.prod_name
 
+#class LineProduct(models.Model):
+
+
+
 
 class Client(models.Model):
     client_firstname = models.CharField(max_length=50)
