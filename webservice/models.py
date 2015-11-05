@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from uuidfield import UUIDField
+from django.db.models.signals import post_save
 
 
 class TVA(models.Model):
@@ -27,9 +28,12 @@ class Product(models.Model):
     def __unicode__(self):
         return self.prod_name
 
-#class LineProduct(models.Model):
 
+class Action(models.Model):
+    action_name = models.CharField(max_length=50)
 
+    def __unicode__(self):
+        return self.action_name
 
 
 class Client(models.Model):
@@ -48,3 +52,31 @@ class Client(models.Model):
     def __unicode__(self):
         return self.client_firstname + " " + self.client_lastname
 
+
+class LineProduct(models.Model):
+    user = models.ForeignKey(User)
+    product = models.ForeignKey(Product)
+    action = models.ForeignKey(Action)
+    date_modification = models.DateTimeField(auto_now=True)
+
+
+class LineClient(models.Model):
+    user = models.ForeignKey(User)
+    client = models.ForeignKey(Client)
+    action = models.ForeignKey(Action)
+    date_modification = models.DateTimeField(auto_now=True)
+
+
+def create_line_product(sender, instance, created, **kwargs):
+    lp = LineProduct()
+    lp.user = User.objects.get(id=1)
+    lp.product = instance
+    if kwargs['update_fields'] is not None:
+        lp.action = Action.objects.get(id=1)
+    else:
+        lp.action = Action.objects.get(id=2)
+
+    lp.save()
+
+
+post_save.connect(create_line_product, sender=Product)

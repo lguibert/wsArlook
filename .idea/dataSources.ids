@@ -6,179 +6,630 @@
       <identifier-quote-string>`</identifier-quote-string>
     </database-info>
     <case-sensitivity plain-identifiers="lower" quoted-identifiers="lower"/>
-    <schema name="" catalog="arlook"/>
-    <table name="auth_group" schema="" catalog="arlook" type="TABLE">
-      <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
-      <column name="name" sqlType="VARCHAR" precision="80" scale="0" nullable="false" jdbcType="12"/>
-      <primary-key name="PRIMARY" columns="id"/>
-      <exported-key name="auth_group_permissions_group_id_58c48ba9_fk_auth_group_id" table="auth_group_permissions" schema="" catalog="arlook" columns="group_id"/>
-      <exported-key name="auth_user_groups_group_id_30a071c9_fk_auth_group_id" table="auth_user_groups" schema="" catalog="arlook" columns="group_id"/>
-      <index name="name" unique="true" columns="name"/>
-    </table>
-    <table name="auth_group_permissions" schema="" catalog="arlook" type="TABLE">
-      <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
-      <column name="group_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
-      <column name="permission_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
-      <primary-key name="PRIMARY" columns="id"/>
-      <foreign-key name="auth_group_permissi_permission_id_23962d04_fk_auth_permission_id" columns="permission_id" ref-table="auth_permission" ref-schema="" ref-catalog="arlook" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
-      <foreign-key name="auth_group_permissions_group_id_58c48ba9_fk_auth_group_id" columns="group_id" ref-table="auth_group" ref-schema="" ref-catalog="arlook" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
-      <index name="group_id" unique="true" columns="permission_id"/>
-      <index name="auth_group_permissi_permission_id_23962d04_fk_auth_permission_id" unique="false" columns="permission_id"/>
-    </table>
-    <table name="auth_permission" schema="" catalog="arlook" type="TABLE">
-      <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
-      <column name="name" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12"/>
-      <column name="content_type_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
-      <column name="codename" sqlType="VARCHAR" precision="100" scale="0" nullable="false" jdbcType="12"/>
-      <primary-key name="PRIMARY" columns="id"/>
-      <foreign-key name="auth_permissi_content_type_id_51277a81_fk_django_content_type_id" columns="content_type_id" ref-table="django_content_type" ref-schema="" ref-catalog="arlook" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
-      <exported-key name="auth_group_permissi_permission_id_23962d04_fk_auth_permission_id" table="auth_group_permissions" schema="" catalog="arlook" columns="permission_id"/>
-      <exported-key name="auth_user_user_perm_permission_id_3d7071f0_fk_auth_permission_id" table="auth_user_user_permissions" schema="" catalog="arlook" columns="permission_id"/>
-      <index name="content_type_id" unique="true" columns="codename"/>
-    </table>
-    <table name="auth_user" schema="" catalog="arlook" type="TABLE">
-      <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
-      <column name="password" sqlType="VARCHAR" precision="128" scale="0" nullable="false" jdbcType="12"/>
-      <column name="last_login" sqlType="DATETIME" precision="19" scale="0" nullable="true" jdbcType="93"/>
-      <column name="is_superuser" sqlType="TINYINT" precision="3" scale="0" nullable="false" jdbcType="-6"/>
-      <column name="username" sqlType="VARCHAR" precision="30" scale="0" nullable="false" jdbcType="12"/>
-      <column name="first_name" sqlType="VARCHAR" precision="30" scale="0" nullable="false" jdbcType="12"/>
-      <column name="last_name" sqlType="VARCHAR" precision="30" scale="0" nullable="false" jdbcType="12"/>
-      <column name="email" sqlType="VARCHAR" precision="254" scale="0" nullable="false" jdbcType="12"/>
-      <column name="is_staff" sqlType="TINYINT" precision="3" scale="0" nullable="false" jdbcType="-6"/>
-      <column name="is_active" sqlType="TINYINT" precision="3" scale="0" nullable="false" jdbcType="-6"/>
-      <column name="date_joined" sqlType="DATETIME" precision="19" scale="0" nullable="false" jdbcType="93"/>
-      <primary-key name="PRIMARY" columns="id"/>
-      <exported-key name="auth_user_groups_user_id_24702650_fk_auth_user_id" table="auth_user_groups" schema="" catalog="arlook" columns="user_id"/>
-      <exported-key name="auth_user_user_permissions_user_id_7cd7acb6_fk_auth_user_id" table="auth_user_user_permissions" schema="" catalog="arlook" columns="user_id"/>
-      <exported-key name="django_admin_log_user_id_1c5f563_fk_auth_user_id" table="django_admin_log" schema="" catalog="arlook" columns="user_id"/>
-      <exported-key name="webservice_client_user_user_id_48d0dce6_fk_auth_user_id" table="webservice_client_user" schema="" catalog="arlook" columns="user_id"/>
-      <exported-key name="webservice_product_user_user_id_1478f55_fk_auth_user_id" table="webservice_product_user" schema="" catalog="arlook" columns="user_id"/>
-      <index name="username" unique="true" columns="username"/>
-    </table>
-    <table name="auth_user_groups" schema="" catalog="arlook" type="TABLE">
-      <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
-      <column name="user_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
-      <column name="group_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
-      <primary-key name="PRIMARY" columns="id"/>
-      <foreign-key name="auth_user_groups_group_id_30a071c9_fk_auth_group_id" columns="group_id" ref-table="auth_group" ref-schema="" ref-catalog="arlook" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
-      <foreign-key name="auth_user_groups_user_id_24702650_fk_auth_user_id" columns="user_id" ref-table="auth_user" ref-schema="" ref-catalog="arlook" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
-      <index name="user_id" unique="true" columns="group_id"/>
-      <index name="auth_user_groups_group_id_30a071c9_fk_auth_group_id" unique="false" columns="group_id"/>
-    </table>
-    <table name="auth_user_user_permissions" schema="" catalog="arlook" type="TABLE">
-      <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
-      <column name="user_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
-      <column name="permission_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
-      <primary-key name="PRIMARY" columns="id"/>
-      <foreign-key name="auth_user_user_perm_permission_id_3d7071f0_fk_auth_permission_id" columns="permission_id" ref-table="auth_permission" ref-schema="" ref-catalog="arlook" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
-      <foreign-key name="auth_user_user_permissions_user_id_7cd7acb6_fk_auth_user_id" columns="user_id" ref-table="auth_user" ref-schema="" ref-catalog="arlook" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
-      <index name="user_id" unique="true" columns="permission_id"/>
-      <index name="auth_user_user_perm_permission_id_3d7071f0_fk_auth_permission_id" unique="false" columns="permission_id"/>
-    </table>
-    <table name="corsheaders_corsmodel" schema="" catalog="arlook" type="TABLE">
-      <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
-      <column name="cors" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12"/>
-      <primary-key name="PRIMARY" columns="id"/>
-    </table>
-    <table name="django_admin_log" schema="" catalog="arlook" type="TABLE">
-      <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
-      <column name="action_time" sqlType="DATETIME" precision="19" scale="0" nullable="false" jdbcType="93"/>
-      <column name="object_id" sqlType="LONGTEXT" precision="2147483647" scale="0" nullable="true" jdbcType="-1"/>
-      <column name="object_repr" sqlType="VARCHAR" precision="200" scale="0" nullable="false" jdbcType="12"/>
-      <column name="action_flag" sqlType="SMALLINT UNSIGNED" precision="5" scale="0" nullable="false" jdbcType="5"/>
-      <column name="change_message" sqlType="LONGTEXT" precision="2147483647" scale="0" nullable="false" jdbcType="-1"/>
-      <column name="content_type_id" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4"/>
-      <column name="user_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
-      <primary-key name="PRIMARY" columns="id"/>
-      <foreign-key name="django_admin__content_type_id_5151027a_fk_django_content_type_id" columns="content_type_id" ref-table="django_content_type" ref-schema="" ref-catalog="arlook" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
-      <foreign-key name="django_admin_log_user_id_1c5f563_fk_auth_user_id" columns="user_id" ref-table="auth_user" ref-schema="" ref-catalog="arlook" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
-      <index name="django_admin__content_type_id_5151027a_fk_django_content_type_id" unique="false" columns="content_type_id"/>
-      <index name="django_admin_log_user_id_1c5f563_fk_auth_user_id" unique="false" columns="user_id"/>
-    </table>
-    <table name="django_content_type" schema="" catalog="arlook" type="TABLE">
-      <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
-      <column name="app_label" sqlType="VARCHAR" precision="100" scale="0" nullable="false" jdbcType="12"/>
-      <column name="model" sqlType="VARCHAR" precision="100" scale="0" nullable="false" jdbcType="12"/>
-      <primary-key name="PRIMARY" columns="id"/>
-      <exported-key name="auth_permissi_content_type_id_51277a81_fk_django_content_type_id" table="auth_permission" schema="" catalog="arlook" columns="content_type_id"/>
-      <exported-key name="django_admin__content_type_id_5151027a_fk_django_content_type_id" table="django_admin_log" schema="" catalog="arlook" columns="content_type_id"/>
-      <index name="django_content_type_app_label_3ec8c61c_uniq" unique="true" columns="app_label,model"/>
-    </table>
-    <table name="django_migrations" schema="" catalog="arlook" type="TABLE">
-      <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
-      <column name="app" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12"/>
-      <column name="name" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12"/>
-      <column name="applied" sqlType="DATETIME" precision="19" scale="0" nullable="false" jdbcType="93"/>
-      <primary-key name="PRIMARY" columns="id"/>
-    </table>
-    <table name="django_session" schema="" catalog="arlook" type="TABLE">
-      <column name="session_key" sqlType="VARCHAR" precision="40" scale="0" nullable="false" jdbcType="12"/>
-      <column name="session_data" sqlType="LONGTEXT" precision="2147483647" scale="0" nullable="false" jdbcType="-1"/>
-      <column name="expire_date" sqlType="DATETIME" precision="19" scale="0" nullable="false" jdbcType="93"/>
-      <primary-key name="PRIMARY" columns="session_key"/>
-      <index name="django_session_de54fa62" unique="false" columns="expire_date"/>
-    </table>
-    <table name="webservice_client" schema="" catalog="arlook" type="TABLE">
-      <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
-      <column name="client_firstname" sqlType="VARCHAR" precision="50" scale="0" nullable="false" jdbcType="12"/>
-      <column name="client_lastname" sqlType="VARCHAR" precision="50" scale="0" nullable="false" jdbcType="12"/>
-      <column name="client_phone" sqlType="VARCHAR" precision="20" scale="0" nullable="true" jdbcType="12"/>
-      <column name="client_address" sqlType="LONGTEXT" precision="2147483647" scale="0" nullable="true" jdbcType="-1"/>
-      <column name="client_town" sqlType="VARCHAR" precision="40" scale="0" nullable="true" jdbcType="12"/>
-      <column name="client_zipcode" sqlType="VARCHAR" precision="10" scale="0" nullable="true" jdbcType="12"/>
-      <column name="client_email" sqlType="VARCHAR" precision="100" scale="0" nullable="true" jdbcType="12"/>
-      <column name="client_lastmodification" sqlType="DATETIME" precision="19" scale="0" nullable="false" jdbcType="93"/>
-      <column name="client_uuid" sqlType="CHAR" precision="32" scale="0" nullable="false" jdbcType="1"/>
-      <primary-key name="PRIMARY" columns="id"/>
-      <exported-key name="webservice_client_use_client_id_3830e6d0_fk_webservice_client_id" table="webservice_client_user" schema="" catalog="arlook" columns="client_id"/>
-      <index name="client_uuid" unique="true" columns="client_uuid"/>
-    </table>
-    <table name="webservice_client_user" schema="" catalog="arlook" type="TABLE">
-      <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
-      <column name="client_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
-      <column name="user_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
-      <primary-key name="PRIMARY" columns="id"/>
-      <foreign-key name="webservice_client_use_client_id_3830e6d0_fk_webservice_client_id" columns="client_id" ref-table="webservice_client" ref-schema="" ref-catalog="arlook" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
-      <foreign-key name="webservice_client_user_user_id_48d0dce6_fk_auth_user_id" columns="user_id" ref-table="auth_user" ref-schema="" ref-catalog="arlook" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
-      <index name="client_id" unique="true" columns="user_id"/>
-      <index name="webservice_client_user_user_id_48d0dce6_fk_auth_user_id" unique="false" columns="user_id"/>
-    </table>
-    <table name="webservice_product" schema="" catalog="arlook" type="TABLE">
-      <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
-      <column name="prod_name" sqlType="VARCHAR" precision="250" scale="0" nullable="false" jdbcType="12"/>
-      <column name="prod_sellprice" sqlType="DECIMAL" precision="6" scale="2" nullable="false" jdbcType="3"/>
-      <column name="prod_buyprice" sqlType="DECIMAL" precision="6" scale="2" nullable="false" jdbcType="3"/>
-      <column name="prod_datebuy" sqlType="DATE" precision="10" scale="0" nullable="false" jdbcType="91"/>
-      <column name="prod_stock" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
-      <column name="prod_lastmodification" sqlType="DATETIME" precision="19" scale="0" nullable="false" jdbcType="93"/>
-      <column name="tva_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
-      <column name="prod_uuid" sqlType="CHAR" precision="32" scale="0" nullable="false" jdbcType="1"/>
-      <column name="prod_image" sqlType="LONGTEXT" precision="2147483647" scale="0" nullable="false" jdbcType="-1"/>
-      <primary-key name="PRIMARY" columns="id"/>
-      <foreign-key name="webservice_product_tva_id_7e929f7b_fk_webservice_tva_id" columns="tva_id" ref-table="webservice_tva" ref-schema="" ref-catalog="arlook" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
-      <exported-key name="webservice_product__product_id_190d4678_fk_webservice_product_id" table="webservice_product_user" schema="" catalog="arlook" columns="product_id"/>
-      <index name="prod_uuid" unique="true" columns="prod_uuid"/>
-      <index name="webservice_product_de95ffc5" unique="false" columns="tva_id"/>
-    </table>
-    <table name="webservice_product_user" schema="" catalog="arlook" type="TABLE">
-      <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
-      <column name="product_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
-      <column name="user_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
-      <primary-key name="PRIMARY" columns="id"/>
-      <foreign-key name="webservice_product__product_id_190d4678_fk_webservice_product_id" columns="product_id" ref-table="webservice_product" ref-schema="" ref-catalog="arlook" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
-      <foreign-key name="webservice_product_user_user_id_1478f55_fk_auth_user_id" columns="user_id" ref-table="auth_user" ref-schema="" ref-catalog="arlook" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
-      <index name="product_id" unique="true" columns="user_id"/>
-      <index name="webservice_product_user_user_id_1478f55_fk_auth_user_id" unique="false" columns="user_id"/>
-    </table>
-    <table name="webservice_tva" schema="" catalog="arlook" type="TABLE">
-      <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
-      <column name="tva_value" sqlType="DECIMAL" precision="4" scale="2" nullable="false" jdbcType="3"/>
-      <column name="tva_uuid" sqlType="CHAR" precision="32" scale="0" nullable="false" jdbcType="1"/>
-      <primary-key name="PRIMARY" columns="id"/>
-      <exported-key name="webservice_product_tva_id_7e929f7b_fk_webservice_tva_id" table="webservice_product" schema="" catalog="arlook" columns="tva_id"/>
-      <index name="tva_uuid" unique="true" columns="tva_uuid"/>
-    </table>
+    <database-model serializer="dbm" rdbms="MYSQL" format-version="2.2">
+      <schema id="1" name="arlook"/>
+      <table id="2" parent="1" name="auth_group"/>
+      <table id="3" parent="1" name="auth_group_permissions"/>
+      <table id="4" parent="1" name="auth_permission"/>
+      <table id="5" parent="1" name="auth_user"/>
+      <table id="6" parent="1" name="auth_user_groups"/>
+      <table id="7" parent="1" name="auth_user_user_permissions"/>
+      <table id="8" parent="1" name="corsheaders_corsmodel"/>
+      <table id="9" parent="1" name="django_admin_log"/>
+      <table id="10" parent="1" name="django_content_type"/>
+      <table id="11" parent="1" name="django_migrations"/>
+      <table id="12" parent="1" name="django_session"/>
+      <table id="13" parent="1" name="webservice_action"/>
+      <table id="14" parent="1" name="webservice_client"/>
+      <table id="15" parent="1" name="webservice_client_user"/>
+      <table id="16" parent="1" name="webservice_lineproduct"/>
+      <table id="17" parent="1" name="webservice_product"/>
+      <table id="18" parent="1" name="webservice_product_user"/>
+      <table id="19" parent="1" name="webservice_tva"/>
+      <column id="20" parent="2" name="id">
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+      </column>
+      <column id="21" parent="2" name="name">
+        <mandatory>1</mandatory>
+        <data-type>varchar(80)</data-type>
+      </column>
+      <index id="22" parent="2" name="name">
+        <columns>name</columns>
+        <unique>1</unique>
+      </index>
+      <key id="23" parent="2" name="name">
+        <columns>name</columns>
+        <underlying-index>name</underlying-index>
+      </key>
+      <key id="24" parent="2" name="PRIMARY">
+        <columns>id</columns>
+        <primary>1</primary>
+      </key>
+      <column id="25" parent="3" name="id">
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+      </column>
+      <column id="26" parent="3" name="group_id">
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+      </column>
+      <column id="27" parent="3" name="permission_id">
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+      </column>
+      <index id="28" parent="3" name="group_id">
+        <columns>group_id
+permission_id</columns>
+        <unique>1</unique>
+      </index>
+      <key id="29" parent="3" name="group_id">
+        <columns>group_id
+permission_id</columns>
+        <underlying-index>group_id</underlying-index>
+      </key>
+      <key id="30" parent="3" name="PRIMARY">
+        <columns>id</columns>
+        <primary>1</primary>
+      </key>
+      <foreign-key id="31" parent="3" name="auth_group_permissions_group_id_58c48ba9_fk_auth_group_id">
+        <columns>group_id</columns>
+        <ref-key>auth_group.PRIMARY</ref-key>
+        <cascade-update-rule>restrict</cascade-update-rule>
+        <cascade-delete-rule>restrict</cascade-delete-rule>
+      </foreign-key>
+      <foreign-key id="32" parent="3" name="auth_group_permissi_permission_id_23962d04_fk_auth_permission_id">
+        <columns>permission_id</columns>
+        <ref-key>auth_permission.PRIMARY</ref-key>
+        <cascade-update-rule>restrict</cascade-update-rule>
+        <cascade-delete-rule>restrict</cascade-delete-rule>
+      </foreign-key>
+      <column id="33" parent="4" name="id">
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+      </column>
+      <column id="34" parent="4" name="name">
+        <mandatory>1</mandatory>
+        <data-type>varchar(255)</data-type>
+      </column>
+      <column id="35" parent="4" name="content_type_id">
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+      </column>
+      <column id="36" parent="4" name="codename">
+        <mandatory>1</mandatory>
+        <data-type>varchar(100)</data-type>
+      </column>
+      <index id="37" parent="4" name="content_type_id">
+        <columns>content_type_id
+codename</columns>
+        <unique>1</unique>
+      </index>
+      <key id="38" parent="4" name="content_type_id">
+        <columns>content_type_id
+codename</columns>
+        <underlying-index>content_type_id</underlying-index>
+      </key>
+      <key id="39" parent="4" name="PRIMARY">
+        <columns>id</columns>
+        <primary>1</primary>
+      </key>
+      <foreign-key id="40" parent="4" name="auth_permissi_content_type_id_51277a81_fk_django_content_type_id">
+        <columns>content_type_id</columns>
+        <ref-key>django_content_type.PRIMARY</ref-key>
+        <cascade-update-rule>restrict</cascade-update-rule>
+        <cascade-delete-rule>restrict</cascade-delete-rule>
+      </foreign-key>
+      <column id="41" parent="5" name="id">
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+      </column>
+      <column id="42" parent="5" name="password">
+        <mandatory>1</mandatory>
+        <data-type>varchar(128)</data-type>
+      </column>
+      <column id="43" parent="5" name="last_login">
+        <data-type>datetime(6)</data-type>
+      </column>
+      <column id="44" parent="5" name="is_superuser">
+        <mandatory>1</mandatory>
+        <data-type>tinyint(1)</data-type>
+      </column>
+      <column id="45" parent="5" name="username">
+        <mandatory>1</mandatory>
+        <data-type>varchar(30)</data-type>
+      </column>
+      <column id="46" parent="5" name="first_name">
+        <mandatory>1</mandatory>
+        <data-type>varchar(30)</data-type>
+      </column>
+      <column id="47" parent="5" name="last_name">
+        <mandatory>1</mandatory>
+        <data-type>varchar(30)</data-type>
+      </column>
+      <column id="48" parent="5" name="email">
+        <mandatory>1</mandatory>
+        <data-type>varchar(254)</data-type>
+      </column>
+      <column id="49" parent="5" name="is_staff">
+        <mandatory>1</mandatory>
+        <data-type>tinyint(1)</data-type>
+      </column>
+      <column id="50" parent="5" name="is_active">
+        <mandatory>1</mandatory>
+        <data-type>tinyint(1)</data-type>
+      </column>
+      <column id="51" parent="5" name="date_joined">
+        <mandatory>1</mandatory>
+        <data-type>datetime(6)</data-type>
+      </column>
+      <index id="52" parent="5" name="username">
+        <columns>username</columns>
+        <unique>1</unique>
+      </index>
+      <key id="53" parent="5" name="PRIMARY">
+        <columns>id</columns>
+        <primary>1</primary>
+      </key>
+      <key id="54" parent="5" name="username">
+        <columns>username</columns>
+        <underlying-index>username</underlying-index>
+      </key>
+      <column id="55" parent="6" name="id">
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+      </column>
+      <column id="56" parent="6" name="user_id">
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+      </column>
+      <column id="57" parent="6" name="group_id">
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+      </column>
+      <index id="58" parent="6" name="user_id">
+        <columns>user_id
+group_id</columns>
+        <unique>1</unique>
+      </index>
+      <key id="59" parent="6" name="PRIMARY">
+        <columns>id</columns>
+        <primary>1</primary>
+      </key>
+      <key id="60" parent="6" name="user_id">
+        <columns>user_id
+group_id</columns>
+        <underlying-index>user_id</underlying-index>
+      </key>
+      <foreign-key id="61" parent="6" name="auth_user_groups_group_id_30a071c9_fk_auth_group_id">
+        <columns>group_id</columns>
+        <ref-key>auth_group.PRIMARY</ref-key>
+        <cascade-update-rule>restrict</cascade-update-rule>
+        <cascade-delete-rule>restrict</cascade-delete-rule>
+      </foreign-key>
+      <foreign-key id="62" parent="6" name="auth_user_groups_user_id_24702650_fk_auth_user_id">
+        <columns>user_id</columns>
+        <ref-key>auth_user.PRIMARY</ref-key>
+        <cascade-update-rule>restrict</cascade-update-rule>
+        <cascade-delete-rule>restrict</cascade-delete-rule>
+      </foreign-key>
+      <column id="63" parent="7" name="id">
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+      </column>
+      <column id="64" parent="7" name="user_id">
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+      </column>
+      <column id="65" parent="7" name="permission_id">
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+      </column>
+      <index id="66" parent="7" name="user_id">
+        <columns>user_id
+permission_id</columns>
+        <unique>1</unique>
+      </index>
+      <key id="67" parent="7" name="PRIMARY">
+        <columns>id</columns>
+        <primary>1</primary>
+      </key>
+      <key id="68" parent="7" name="user_id">
+        <columns>user_id
+permission_id</columns>
+        <underlying-index>user_id</underlying-index>
+      </key>
+      <foreign-key id="69" parent="7" name="auth_user_user_permissions_user_id_7cd7acb6_fk_auth_user_id">
+        <columns>user_id</columns>
+        <ref-key>auth_user.PRIMARY</ref-key>
+        <cascade-update-rule>restrict</cascade-update-rule>
+        <cascade-delete-rule>restrict</cascade-delete-rule>
+      </foreign-key>
+      <foreign-key id="70" parent="7" name="auth_user_user_perm_permission_id_3d7071f0_fk_auth_permission_id">
+        <columns>permission_id</columns>
+        <ref-key>auth_permission.PRIMARY</ref-key>
+        <cascade-update-rule>restrict</cascade-update-rule>
+        <cascade-delete-rule>restrict</cascade-delete-rule>
+      </foreign-key>
+      <column id="71" parent="8" name="id">
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+      </column>
+      <column id="72" parent="8" name="cors">
+        <mandatory>1</mandatory>
+        <data-type>varchar(255)</data-type>
+      </column>
+      <key id="73" parent="8" name="PRIMARY">
+        <columns>id</columns>
+        <primary>1</primary>
+      </key>
+      <column id="74" parent="9" name="id">
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+      </column>
+      <column id="75" parent="9" name="action_time">
+        <mandatory>1</mandatory>
+        <data-type>datetime(6)</data-type>
+      </column>
+      <column id="76" parent="9" name="object_id">
+        <data-type>longtext</data-type>
+      </column>
+      <column id="77" parent="9" name="object_repr">
+        <mandatory>1</mandatory>
+        <data-type>varchar(200)</data-type>
+      </column>
+      <column id="78" parent="9" name="action_flag">
+        <mandatory>1</mandatory>
+        <data-type>smallint(5) unsigned</data-type>
+      </column>
+      <column id="79" parent="9" name="change_message">
+        <mandatory>1</mandatory>
+        <data-type>longtext</data-type>
+      </column>
+      <column id="80" parent="9" name="content_type_id">
+        <data-type>int(11)</data-type>
+      </column>
+      <column id="81" parent="9" name="user_id">
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+      </column>
+      <key id="82" parent="9" name="PRIMARY">
+        <columns>id</columns>
+        <primary>1</primary>
+      </key>
+      <foreign-key id="83" parent="9" name="django_admin_log_user_id_1c5f563_fk_auth_user_id">
+        <columns>user_id</columns>
+        <ref-key>auth_user.PRIMARY</ref-key>
+        <cascade-update-rule>restrict</cascade-update-rule>
+        <cascade-delete-rule>restrict</cascade-delete-rule>
+      </foreign-key>
+      <foreign-key id="84" parent="9" name="django_admin__content_type_id_5151027a_fk_django_content_type_id">
+        <columns>content_type_id</columns>
+        <ref-key>django_content_type.PRIMARY</ref-key>
+        <cascade-update-rule>restrict</cascade-update-rule>
+        <cascade-delete-rule>restrict</cascade-delete-rule>
+      </foreign-key>
+      <column id="85" parent="10" name="id">
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+      </column>
+      <column id="86" parent="10" name="app_label">
+        <mandatory>1</mandatory>
+        <data-type>varchar(100)</data-type>
+      </column>
+      <column id="87" parent="10" name="model">
+        <mandatory>1</mandatory>
+        <data-type>varchar(100)</data-type>
+      </column>
+      <index id="88" parent="10" name="django_content_type_app_label_3ec8c61c_uniq">
+        <columns>app_label
+model</columns>
+        <unique>1</unique>
+      </index>
+      <key id="89" parent="10" name="django_content_type_app_label_3ec8c61c_uniq">
+        <columns>app_label
+model</columns>
+        <underlying-index>django_content_type_app_label_3ec8c61c_uniq</underlying-index>
+      </key>
+      <key id="90" parent="10" name="PRIMARY">
+        <columns>id</columns>
+        <primary>1</primary>
+      </key>
+      <column id="91" parent="11" name="id">
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+      </column>
+      <column id="92" parent="11" name="app">
+        <mandatory>1</mandatory>
+        <data-type>varchar(255)</data-type>
+      </column>
+      <column id="93" parent="11" name="name">
+        <mandatory>1</mandatory>
+        <data-type>varchar(255)</data-type>
+      </column>
+      <column id="94" parent="11" name="applied">
+        <mandatory>1</mandatory>
+        <data-type>datetime(6)</data-type>
+      </column>
+      <key id="95" parent="11" name="PRIMARY">
+        <columns>id</columns>
+        <primary>1</primary>
+      </key>
+      <column id="96" parent="12" name="session_key">
+        <mandatory>1</mandatory>
+        <data-type>varchar(40)</data-type>
+      </column>
+      <column id="97" parent="12" name="session_data">
+        <mandatory>1</mandatory>
+        <data-type>longtext</data-type>
+      </column>
+      <column id="98" parent="12" name="expire_date">
+        <mandatory>1</mandatory>
+        <data-type>datetime(6)</data-type>
+      </column>
+      <key id="99" parent="12" name="PRIMARY">
+        <columns>session_key</columns>
+        <primary>1</primary>
+      </key>
+      <column id="100" parent="13" name="id">
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+      </column>
+      <column id="101" parent="13" name="action_name">
+        <mandatory>1</mandatory>
+        <data-type>varchar(50)</data-type>
+      </column>
+      <key id="102" parent="13" name="PRIMARY">
+        <columns>id</columns>
+        <primary>1</primary>
+      </key>
+      <column id="103" parent="14" name="id">
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+      </column>
+      <column id="104" parent="14" name="client_firstname">
+        <mandatory>1</mandatory>
+        <data-type>varchar(50)</data-type>
+      </column>
+      <column id="105" parent="14" name="client_lastname">
+        <mandatory>1</mandatory>
+        <data-type>varchar(50)</data-type>
+      </column>
+      <column id="106" parent="14" name="client_phone">
+        <data-type>varchar(20)</data-type>
+      </column>
+      <column id="107" parent="14" name="client_address">
+        <data-type>longtext</data-type>
+      </column>
+      <column id="108" parent="14" name="client_town">
+        <data-type>varchar(40)</data-type>
+      </column>
+      <column id="109" parent="14" name="client_zipcode">
+        <data-type>varchar(10)</data-type>
+      </column>
+      <column id="110" parent="14" name="client_email">
+        <data-type>varchar(100)</data-type>
+      </column>
+      <column id="111" parent="14" name="client_lastmodification">
+        <mandatory>1</mandatory>
+        <data-type>datetime(6)</data-type>
+      </column>
+      <column id="112" parent="14" name="client_uuid">
+        <mandatory>1</mandatory>
+        <data-type>char(32)</data-type>
+      </column>
+      <index id="113" parent="14" name="client_uuid">
+        <columns>client_uuid</columns>
+        <unique>1</unique>
+      </index>
+      <key id="114" parent="14" name="client_uuid">
+        <columns>client_uuid</columns>
+        <underlying-index>client_uuid</underlying-index>
+      </key>
+      <key id="115" parent="14" name="PRIMARY">
+        <columns>id</columns>
+        <primary>1</primary>
+      </key>
+      <column id="116" parent="15" name="id">
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+      </column>
+      <column id="117" parent="15" name="client_id">
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+      </column>
+      <column id="118" parent="15" name="user_id">
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+      </column>
+      <index id="119" parent="15" name="client_id">
+        <columns>client_id
+user_id</columns>
+        <unique>1</unique>
+      </index>
+      <key id="120" parent="15" name="client_id">
+        <columns>client_id
+user_id</columns>
+        <underlying-index>client_id</underlying-index>
+      </key>
+      <key id="121" parent="15" name="PRIMARY">
+        <columns>id</columns>
+        <primary>1</primary>
+      </key>
+      <foreign-key id="122" parent="15" name="webservice_client_user_user_id_48d0dce6_fk_auth_user_id">
+        <columns>user_id</columns>
+        <ref-key>auth_user.PRIMARY</ref-key>
+        <cascade-update-rule>restrict</cascade-update-rule>
+        <cascade-delete-rule>restrict</cascade-delete-rule>
+      </foreign-key>
+      <foreign-key id="123" parent="15" name="webservice_client_use_client_id_3830e6d0_fk_webservice_client_id">
+        <columns>client_id</columns>
+        <ref-key>webservice_client.PRIMARY</ref-key>
+        <cascade-update-rule>restrict</cascade-update-rule>
+        <cascade-delete-rule>restrict</cascade-delete-rule>
+      </foreign-key>
+      <column id="124" parent="16" name="id">
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+      </column>
+      <column id="125" parent="16" name="date_modification">
+        <mandatory>1</mandatory>
+        <data-type>datetime(6)</data-type>
+      </column>
+      <column id="126" parent="16" name="action_id">
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+      </column>
+      <column id="127" parent="16" name="product_id">
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+      </column>
+      <column id="128" parent="16" name="user_id">
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+      </column>
+      <key id="129" parent="16" name="PRIMARY">
+        <columns>id</columns>
+        <primary>1</primary>
+      </key>
+      <foreign-key id="130" parent="16" name="webservice_lineproduct_user_id_36645c70_fk_auth_user_id">
+        <columns>user_id</columns>
+        <ref-key>auth_user.PRIMARY</ref-key>
+        <cascade-update-rule>restrict</cascade-update-rule>
+        <cascade-delete-rule>restrict</cascade-delete-rule>
+      </foreign-key>
+      <foreign-key id="131" parent="16" name="webservice_lineproduc_action_id_38f4992b_fk_webservice_action_id">
+        <columns>action_id</columns>
+        <ref-key>webservice_action.PRIMARY</ref-key>
+        <cascade-update-rule>restrict</cascade-update-rule>
+        <cascade-delete-rule>restrict</cascade-delete-rule>
+      </foreign-key>
+      <foreign-key id="132" parent="16" name="webservice_lineprod_product_id_28bb786d_fk_webservice_product_id">
+        <columns>product_id</columns>
+        <ref-key>webservice_product.PRIMARY</ref-key>
+        <cascade-update-rule>restrict</cascade-update-rule>
+        <cascade-delete-rule>restrict</cascade-delete-rule>
+      </foreign-key>
+      <column id="133" parent="17" name="id">
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+      </column>
+      <column id="134" parent="17" name="prod_name">
+        <mandatory>1</mandatory>
+        <data-type>varchar(250)</data-type>
+      </column>
+      <column id="135" parent="17" name="prod_sellprice">
+        <mandatory>1</mandatory>
+        <data-type>decimal(6,2)</data-type>
+      </column>
+      <column id="136" parent="17" name="prod_buyprice">
+        <mandatory>1</mandatory>
+        <data-type>decimal(6,2)</data-type>
+      </column>
+      <column id="137" parent="17" name="prod_datebuy">
+        <mandatory>1</mandatory>
+        <data-type>date</data-type>
+      </column>
+      <column id="138" parent="17" name="prod_stock">
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+      </column>
+      <column id="139" parent="17" name="prod_lastmodification">
+        <mandatory>1</mandatory>
+        <data-type>datetime(6)</data-type>
+      </column>
+      <column id="140" parent="17" name="tva_id">
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+      </column>
+      <column id="141" parent="17" name="prod_uuid">
+        <mandatory>1</mandatory>
+        <data-type>char(32)</data-type>
+      </column>
+      <column id="142" parent="17" name="prod_image">
+        <data-type>longtext</data-type>
+      </column>
+      <index id="143" parent="17" name="prod_uuid">
+        <columns>prod_uuid</columns>
+        <unique>1</unique>
+      </index>
+      <key id="144" parent="17" name="PRIMARY">
+        <columns>id</columns>
+        <primary>1</primary>
+      </key>
+      <key id="145" parent="17" name="prod_uuid">
+        <columns>prod_uuid</columns>
+        <underlying-index>prod_uuid</underlying-index>
+      </key>
+      <foreign-key id="146" parent="17" name="webservice_product_tva_id_7e929f7b_fk_webservice_tva_id">
+        <columns>tva_id</columns>
+        <ref-key>webservice_tva.PRIMARY</ref-key>
+        <cascade-update-rule>restrict</cascade-update-rule>
+        <cascade-delete-rule>restrict</cascade-delete-rule>
+      </foreign-key>
+      <column id="147" parent="18" name="id">
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+      </column>
+      <column id="148" parent="18" name="product_id">
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+      </column>
+      <column id="149" parent="18" name="user_id">
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+      </column>
+      <index id="150" parent="18" name="product_id">
+        <columns>product_id
+user_id</columns>
+        <unique>1</unique>
+      </index>
+      <key id="151" parent="18" name="PRIMARY">
+        <columns>id</columns>
+        <primary>1</primary>
+      </key>
+      <key id="152" parent="18" name="product_id">
+        <columns>product_id
+user_id</columns>
+        <underlying-index>product_id</underlying-index>
+      </key>
+      <foreign-key id="153" parent="18" name="webservice_product_user_user_id_1478f55_fk_auth_user_id">
+        <columns>user_id</columns>
+        <ref-key>auth_user.PRIMARY</ref-key>
+        <cascade-update-rule>restrict</cascade-update-rule>
+        <cascade-delete-rule>restrict</cascade-delete-rule>
+      </foreign-key>
+      <foreign-key id="154" parent="18" name="webservice_product__product_id_190d4678_fk_webservice_product_id">
+        <columns>product_id</columns>
+        <ref-key>webservice_product.PRIMARY</ref-key>
+        <cascade-update-rule>restrict</cascade-update-rule>
+        <cascade-delete-rule>restrict</cascade-delete-rule>
+      </foreign-key>
+      <column id="155" parent="19" name="id">
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+      </column>
+      <column id="156" parent="19" name="tva_value">
+        <mandatory>1</mandatory>
+        <data-type>decimal(4,2)</data-type>
+      </column>
+      <column id="157" parent="19" name="tva_uuid">
+        <mandatory>1</mandatory>
+        <data-type>char(32)</data-type>
+      </column>
+      <index id="158" parent="19" name="tva_uuid">
+        <columns>tva_uuid</columns>
+        <unique>1</unique>
+      </index>
+      <key id="159" parent="19" name="PRIMARY">
+        <columns>id</columns>
+        <primary>1</primary>
+      </key>
+      <key id="160" parent="19" name="tva_uuid">
+        <columns>tva_uuid</columns>
+        <underlying-index>tva_uuid</underlying-index>
+      </key>
+    </database-model>
   </data-source>
   <data-source name="Django default2" uuid="334aa16d-66b3-477f-ab8b-67040e3e5036">
     <database-info product="MySQL" version="5.6.23-log" jdbc-version="4.0" driver-name="MySQL Connector Java" driver-version="mysql-connector-java-5.1.35 ( Revision: 5fb9c5849535c13917c2cf9baaece6ef9693ef27 )">
