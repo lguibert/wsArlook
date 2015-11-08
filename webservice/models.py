@@ -19,10 +19,10 @@ class Product(models.Model):
     prod_buyprice = models.DecimalField(max_digits=6, decimal_places=2)
     prod_datebuy = models.DateField()
     prod_stock = models.IntegerField()
+    prod_stock_store = models.IntegerField()
     prod_lastmodification = models.DateTimeField(auto_now=True)
     prod_image = models.TextField()
 
-    user = models.ManyToManyField(User)
     tva = models.ForeignKey(TVA)
 
     def __unicode__(self):
@@ -47,8 +47,6 @@ class Client(models.Model):
     client_lastmodification = models.DateTimeField(auto_now=True)
     client_uuid = UUIDField(auto=True)
 
-    user = models.ManyToManyField(User)
-
     def __unicode__(self):
         return self.client_firstname + " " + self.client_lastname
 
@@ -71,7 +69,8 @@ def create_line_product(sender, instance, created, **kwargs):
     lp = LineProduct()
     lp.user = User.objects.get(id=1)
     lp.product = instance
-    if kwargs['update_fields'] is not None:
+
+    if created is not None:
         lp.action = Action.objects.get(id=1)
     else:
         lp.action = Action.objects.get(id=2)

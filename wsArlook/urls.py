@@ -7,8 +7,10 @@ urlpatterns = patterns('webservice.views',
 
                        url(r'product/in/?', 'in_product'),
                        url(r'product/out/?', "out_product"),
-                       url(r'product/(?P<uuid>[a-zA-Z0-9]{1,})/?', 'get_product'),
                        url(r'product/update/?', 'update_product'),
+                       url(r'product/line/(?P<uuid>[a-zA-Z0-9]{1,})/?', 'line_prod'),
+                       url(r'product/(?P<uuid>[a-zA-Z0-9]{1,})/?', 'get_product'),
+
 
                        url(r'tva/?', 'get_tva'),
 

@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 import json
-from webservice.models import Product
+from webservice.models import Product, LineProduct
 from django.views.decorators.csrf import csrf_exempt
 from general_views import send_response, serialize
 from tva_views import get_tva_uuid
+import datetime
 
 
 def get_products(request):
@@ -17,8 +18,9 @@ def get_product(request, uuid):
     tab = {"prod_name": product.prod_name,
            "prod_sellprice": str(product.prod_sellprice),
            "prod_buyprice": str(product.prod_buyprice),
-           "prod_datebuy": product.prod_datebuy.strftime("%d/%m/%Y"),
+           "prod_datebuy": product.prod_datebuy.strftime("%m/%d/%Y"),
            "prod_stock": product.prod_stock,
+           "prod_stock_store": product.prod_stock_store,
            "prod_image": product.prod_image,
            "prod_tva_value": str(product.tva.tva_value),
            "prod_lastmodification": str(product.prod_lastmodification),
@@ -46,6 +48,7 @@ def new_product(request):
         product.prod_buyprice = newprod['buyprice']
         product.prod_datebuy = newprod['datebuy'].split("T")[0]
         product.prod_stock = newprod['stock']
+        product.prod_stock_store = newprod['stock_store']
         product.prod_image = newprod['image']
 
         product.tva_id = get_tva_uuid(newprod['tva'])
@@ -62,24 +65,27 @@ def update_product(request):
     if request.method == 'POST':
         prod = json.loads(request.body)
 
-        print prod
+        product = Product.objects.get(prod_uuid=prod['prod_uuid'])
 
-        product = Product.objects.get(uuid=prod['uuid'])
+        product.prod_name = prod['prod_name']
+        product.prod_sellprice = prod['prod_sellprice']
+        product.prod_buyprice = prod['prod_buyprice']
+        product.prod_datebuy = prod['prod_datebuy']
+        product.prod_stock = prod['prod_stock']
+        product.prod_stock_store = prod['prod_stock_store']
+        product.prod_image = prod['prod_image']
 
-        product.prod_name = prod['name']
-        product.prod_sellprice = prod['sellprice']
-        product.prod_buyprice = prod['buyprice']
-        product.prod_datebuy = prod['datebuy'].split("T")[0]
-        product.prod_stock = prod['stock']
-        product.prod_image = prod['image']
-
-        product.tva_id = get_tva_uuid(prod['tva'])
+        product.tva_id = get_tva_uuid(prod['prod_tva'])
 
         try:
             product.save()
-            return send_response(True)
+
+            splited = product.prod_datebuy.split("-")
+            product.prod_datebuy = datetime.date(int(splited[0]), int(splited[1]), int(splited[2]))
+
+            return send_response(serialize([product]))
         except:
-            return send_response(False, 500)
+            return send_response("Problème lors de la mise à jour.", 500)
 
 
 @csrf_exempt
@@ -103,15 +109,12 @@ def out_product(request):
             return send_response("Erreur lors de la mise à jour du produit.", 500)
 
 
-def update_product(uuid, quantity, operation):
-    try:
-        prod = Product.objects.get(prod_uuid=uuid)
-        if operation == "+":
-            prod.prod_stock = int(prod.prod_stock) + int(quantity)
-        elif operation == "-":
-            prod.prod_stock = int(prod.prod_stock) - int(quantity)
+def line_prod(request, uuid):
+    prod = Product.objects.get(prod_uuid=uuid)
+    linesprod = LineProduct.objects.filter(product_id=prod.id)
+    lines = []
 
-        prod.save()
-        return True
-    except:
-        return False
+    for line in linesprod:
+        lines.append([line.action.action_name, line.user.username, line.date_modification.strftime("%d/%m/%Y à %H:%M:%S")])
+
+    return send_response(lines)

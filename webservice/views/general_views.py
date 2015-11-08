@@ -14,27 +14,3 @@ def send_response(data, code=200):
 
 def serialize(data):
     return serializers.serialize('json', data)
-
-
-# data = {"type": "value", data: {"user":"id","prod":"id" / "client":"id", "action":"id"}}
-def trace_action(data):
-    if data.type == "prod":
-        try:
-            lp = LineProduct()
-            lp.user = data.data.user
-            lp.product = data.data.prod
-            lp.action = data.data.action
-            lp.save()
-            return True
-        except:
-            return None
-    elif data.type == "client":
-        try:
-            lc = LineClient()
-            lc.user = data.data.user
-            lc.client = data.data.client
-            lc.action = data.data.action
-            lc.save()
-            return True
-        except:
-            return None
