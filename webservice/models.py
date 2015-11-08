@@ -22,6 +22,7 @@ class Product(models.Model):
     prod_stock_store = models.IntegerField()
     prod_lastmodification = models.DateTimeField(auto_now=True)
     prod_image = models.TextField()
+    active = models.BooleanField(default=True)
 
     tva = models.ForeignKey(TVA)
 
@@ -46,6 +47,7 @@ class Client(models.Model):
     client_email = models.CharField(max_length=100, null=True)
     client_lastmodification = models.DateTimeField(auto_now=True)
     client_uuid = UUIDField(auto=True)
+    active = models.BooleanField(default=True)
 
     def __unicode__(self):
         return self.client_firstname + " " + self.client_lastname
@@ -67,7 +69,7 @@ class LineClient(models.Model):
 
 def create_line_product(sender, instance, created, **kwargs):
     lp = LineProduct()
-    lp.user = User.objects.get(id=1)
+    lp.user = User.objects.order_by("-last_login")[0]
     lp.product = instance
 
     if created is not None:
@@ -78,4 +80,18 @@ def create_line_product(sender, instance, created, **kwargs):
     lp.save()
 
 
+def create_line_client(sender, instance, created, **kwargs):
+    lc = LineClient()
+    lc.user = User.objects.order_by("-last_login")[0]
+    lc.client = instance
+
+    if created is not None:
+        lc.action = Action.objects.get(id=1)
+    else:
+        lc.action = Action.objects.get(id=2)
+
+    lc.save()
+
+
 post_save.connect(create_line_product, sender=Product)
+post_save.connect(create_line_client, sender=Client)

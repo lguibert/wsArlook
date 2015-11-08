@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import json
-from webservice.models import Product, LineProduct
+from webservice.models import Product, LineProduct, User
 from django.views.decorators.csrf import csrf_exempt
 from general_views import send_response, serialize
 from tva_views import get_tva_uuid
@@ -8,7 +8,7 @@ import datetime
 
 
 def get_products(request):
-    products = Product.objects.all()
+    products = Product.objects.filter(active=1)
     return send_response(serialize(products))
 
 

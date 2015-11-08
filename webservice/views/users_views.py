@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from general_views import send_response
 from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, login as auth_login
 import json
 
 
@@ -11,6 +11,7 @@ def login(request):
         data = json.loads(request.body)
         user = authenticate(username=data['username'], password=data['password'])
         if user is not None:
+            auth_login(request, user)
             if user.is_superuser:
                 return send_response([user.username, user.password, "admin"])
             else:

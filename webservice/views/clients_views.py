@@ -6,7 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 
 def get_clients(request):
-    clients = Client.objects.all()
+    clients = Client.objects.filter(active=1)
     return send_response(serialize(clients))
 
 
