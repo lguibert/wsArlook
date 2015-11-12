@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import json
-from webservice.models import Product, LineProduct, User
+from webservice.models import Product, LineProduct, Sell, User, TVA
 from django.views.decorators.csrf import csrf_exempt
 from general_views import send_response, serialize
 from tva_views import get_tva_uuid
@@ -93,7 +93,7 @@ def in_product(request):
     if request.method == "POST":
         data = json.loads(request.body)
 
-        if update_product(data[0], data[1], "+"):
+        if update_stock_product(data[0], data[1], "+"):
             return send_response(True)
         else:
             return send_response("Erreur lors de la mise à jour du produit.", 500)
@@ -103,10 +103,71 @@ def in_product(request):
 def out_product(request):
     if request.method == "POST":
         data = json.loads(request.body)
-        if update_product(data[0], data[1], "-"):
+        if update_stock_product(data[0], data[1], "-"):
             return send_response(True)
         else:
             return send_response("Erreur lors de la mise à jour du produit.", 500)
+
+
+def update_stock_product(uuid, quantity, operation):
+    try:
+        prod = Product.objects.get(prod_uuid=uuid)
+        if operation == "+":
+            prod.prod_stock = int(prod.prod_stock) + int(quantity)
+        elif operation == "-":
+            create_sell(prod, quantity)
+            prod.prod_stock = int(prod.prod_stock) - int(quantity)
+
+        prod.save()
+        return True
+    except:
+        return False
+
+
+def create_sell(product, quantity):
+    sell = Sell()
+    sell.user = User.objects.order_by("-last_login")[0]
+    sell.product = product
+    sell.tva = TVA.objects.get(id=product.tva_id)
+    sell.price = product.prod_sellprice
+    sell.qte = quantity
+    sell.save()
+
+
+@csrf_exempt
+def in_product_store(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+
+        if update_stock_product_store(data[0], data[1], "+"):
+            return send_response(True)
+        else:
+            return send_response("Erreur lors de la mise à jour du produit.", 500)
+
+
+@csrf_exempt
+def out_product_store(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        if update_stock_product_store(data[0], data[1], "-"):
+            return send_response(True)
+        else:
+            return send_response("Erreur lors de la mise à jour du produit.", 500)
+
+
+def update_stock_product_store(uuid, quantity, operation):
+    try:
+        prod = Product.objects.get(prod_uuid=uuid)
+        if operation == "+":
+            prod.prod_stock_store = int(prod.prod_stock_store) + int(quantity)
+        elif operation == "-":
+            prod.prod_stock_store = int(prod.prod_stock_store) - int(quantity)
+
+        prod.save()
+        return True
+
+    except:
+        return False
 
 
 def line_prod(request, uuid):
@@ -115,6 +176,7 @@ def line_prod(request, uuid):
     lines = []
 
     for line in linesprod:
-        lines.append([line.action.action_name, line.user.username, line.date_modification.strftime("%d/%m/%Y à %H:%M:%S")])
+        lines.append(
+            [line.action.action_name, line.user.username, line.date_modification.strftime("%d/%m/%Y à %H:%M:%S")])
 
     return send_response(lines)

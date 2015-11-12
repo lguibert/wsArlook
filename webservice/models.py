@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from uuidfield import UUIDField
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_save
 
 
 class TVA(models.Model):
@@ -72,10 +72,10 @@ def create_line_product(sender, instance, created, **kwargs):
     lp.user = User.objects.order_by("-last_login")[0]
     lp.product = instance
 
-    if created is not None:
-        lp.action = Action.objects.get(id=1)
-    else:
+    if created:
         lp.action = Action.objects.get(id=2)
+    else:
+        lp.action = Action.objects.get(id=1)
 
     lp.save()
 
@@ -85,12 +85,23 @@ def create_line_client(sender, instance, created, **kwargs):
     lc.user = User.objects.order_by("-last_login")[0]
     lc.client = instance
 
-    if created is not None:
-        lc.action = Action.objects.get(id=1)
-    else:
+    if created:
         lc.action = Action.objects.get(id=2)
+    else:
+        lc.action = Action.objects.get(id=1)
 
     lc.save()
+
+
+# ------------------------ BILAN ZONE ------------------------
+class Sell(models.Model):
+    user = models.ForeignKey(User)
+    product = models.ForeignKey(Product)
+    tva = models.ForeignKey(TVA)
+    date = models.DateTimeField(auto_now=True)
+    price = models.DecimalField(max_digits=6, decimal_places=2)
+    qte = models.IntegerField()
+
 
 
 post_save.connect(create_line_product, sender=Product)
