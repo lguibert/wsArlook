@@ -3,6 +3,25 @@ from general_views import send_response
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate, login as auth_login
 import json
+from webservice.models import User
+from django.contrib.auth.hashers import make_password
+
+
+@csrf_exempt
+def update_password(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+
+            user = User.objects.get(username=data[1])
+
+            user.password = make_password(data[0])
+
+            user.save()
+
+            return send_response(True)
+        except:
+            return send_response("Erreur lors du changement de mot de passe.", 500)
 
 
 @csrf_exempt

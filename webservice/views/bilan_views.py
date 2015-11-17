@@ -14,7 +14,6 @@ def get_bilan(request):
 
         return send_response(lines)
     else:
-        print "GET !"
         prod_lines_day = get_typed_bilan("day")
         prod_lines_week = get_typed_bilan("week")
         prod_lines_month = get_typed_bilan("month")
