@@ -20,7 +20,6 @@ class Product(models.Model):
     prod_datebuy = models.DateField()
     prod_stock = models.IntegerField()
     prod_stock_store = models.IntegerField()
-    prod_lastmodification = models.DateTimeField(auto_now=True)
     prod_image = models.TextField()
     active = models.BooleanField(default=True)
 
@@ -45,12 +44,16 @@ class Client(models.Model):
     client_town = models.CharField(max_length=40, null=True)
     client_zipcode = models.CharField(max_length=10, null=True)
     client_email = models.CharField(max_length=100, null=True)
-    client_lastmodification = models.DateTimeField(auto_now=True)
     client_uuid = UUIDField(auto=True)
     active = models.BooleanField(default=True)
 
     def __unicode__(self):
         return self.client_firstname + " " + self.client_lastname
+
+
+class Visit(models.Model):
+    visit_date = models.DateField(auto_now=True)
+    client = models.ForeignKey(Client, default=1)
 
 
 class LineProduct(models.Model):

@@ -1,18 +1,58 @@
 # -*- coding: utf-8 -*-
 import json
 from general_views import send_response, serialize
-from webservice.models import Client, LineClient
+from webservice.models import Client, LineClient, Visit
 from django.views.decorators.csrf import csrf_exempt
+
+date_format = "%d/%m/%Y"
 
 
 def get_clients(request):
     clients = Client.objects.filter(active=1)
-    return send_response(serialize(clients))
+    clis = []
+    for client in clients:
+        visit = Visit.objects.filter(client_id=client.id).order_by("-visit_date")[:1]
+        if visit:
+            client.client_visit = visit[0].visit_date.strftime(date_format)
+        else:
+            client.client_visit = "Aucune visite"
+
+        c = {"client_firstname": client.client_firstname,
+             "client_lastname": client.client_lastname,
+             "client_phone": client.client_phone,
+             "client_address": client.client_address,
+             "client_town": client.client_town,
+             "client_zipcode": client.client_zipcode,
+             "client_email": client.client_email,
+             "client_uuid": str(client.client_uuid),
+             "client_visit": client.client_visit
+             }
+
+        clis.append(c)
+
+    return send_response(clis)
 
 
 def get_client(request, uuid):
-    client = Client.objects.filter(client_uuid=uuid)
-    return send_response(serialize(client))
+    client = Client.objects.get(client_uuid=uuid)
+    visit = Visit.objects.filter(client_id=client.id)
+
+    visits = []
+    for v in visit:
+        visits.append(v.visit_date.strftime(date_format))
+
+    client = {"client_firstname": client.client_firstname,
+              "client_lastname": client.client_lastname,
+              "client_phone": client.client_phone,
+              "client_address": client.client_address,
+              "client_town": client.client_town,
+              "client_zipcode": client.client_zipcode,
+              "client_email": client.client_email,
+              "client_uuid": str(client.client_uuid),
+              "client_visit": visits
+              }
+
+    return send_response(client)
 
 
 @csrf_exempt
@@ -65,6 +105,20 @@ def line_client(request, uuid):
 
     for line in linescli:
         lines.append(
-            [line.action.action_name, line.user.username, line.date_modification.strftime("%d/%m/%Y à %H:%M:%S")])
+            [line.action.action_name, line.user.username, line.date_modification.strftime(date_format + " à %H:%M:%S")])
 
     return send_response(lines)
+
+
+@csrf_exempt
+def update_visit_client(request):
+    if request.method == 'POST':
+        uuid = request.body
+        try:
+            client = Client.objects.get(client_uuid=uuid)
+            v = Visit()
+            v.client = client
+            v.save()
+            return send_response(True)
+        except:
+            return send_response("Erreur lors de la sauvegarde la nouvelle visite.", 500)

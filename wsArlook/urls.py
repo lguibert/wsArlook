@@ -5,7 +5,6 @@ urlpatterns = patterns('webservice.views',
 
                        url(r'products/?', 'get_products'),
 
-
                        url(r'product/in/store/?', 'in_product_store'),
                        url(r'product/out/store/?', "out_product_store"),
                        url(r'product/in/?', 'in_product'),
@@ -14,9 +13,9 @@ urlpatterns = patterns('webservice.views',
                        url(r'product/line/(?P<uuid>[a-zA-Z0-9]{1,})/?', 'line_prod'),
                        url(r'product/(?P<uuid>[a-zA-Z0-9]{1,})/?', 'get_product'),
 
-
                        url(r'tva/?', 'get_tva'),
 
+                       url(r'client/visit/?', 'update_visit_client'),
                        url(r'clients/add/?', 'new_client'),
                        url(r'clients/?', 'get_clients'),
                        url(r'client/update/?', 'update_client'),
@@ -27,6 +26,5 @@ urlpatterns = patterns('webservice.views',
 
                        url(r'login/?', 'login'),
                        url(r'user/update/?', 'update_password'),
-
 
                        )
