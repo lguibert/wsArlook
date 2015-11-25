@@ -39,3 +39,23 @@ def login(request):
             return send_response("Erreur d'identifiant", 500)
     else:
         return send_response("", 500)
+
+
+@csrf_exempt
+def new_user(request):
+    if request.method == "POST":
+        newuser = json.loads(request.body)
+
+        try:
+            user = User()
+            user.password = make_password(newuser['password'])
+            user.username = newuser['name']
+            user.first_name = newuser['name']
+            if 'email' in newuser:
+                user.email = newuser['email']
+            user.is_superuser = newuser['superuser']
+            user.save()
+
+            return send_response(True)
+        except:
+            return send_response("Erreur lors de la création de l\'utilisateur", 500)

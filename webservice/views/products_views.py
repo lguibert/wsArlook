@@ -23,7 +23,6 @@ def get_product(request, uuid):
            "prod_stock_store": product.prod_stock_store,
            "prod_image": product.prod_image,
            "prod_tva_value": str(product.tva.tva_value),
-           "prod_lastmodification": str(product.prod_lastmodification),
            "prod_uuid": str(product.prod_uuid),
            "prod_tva": str(product.tva.tva_uuid)
            }
