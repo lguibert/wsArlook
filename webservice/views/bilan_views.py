@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from webservice.models import Sell
 from general_views import send_response, serialize
 import datetime
@@ -24,15 +25,29 @@ def get_bilan(request):
 
         final = {}
 
-        for arrays in all:
+        for i, arrays in enumerate(all):
+            i = index_to_type(i)
             for user in arrays:
                 if not str(user[0]) in final:
-                    final[str(user[0])] = [user[1]]
-                    final[str(user[0])].append(user[2])
+                    final[str(user[0])] = [user[1], []]
+                    final[str(user[0])][1].append({i: user[2]})
                 else:
-                    final[str(user[0])].append(user[2])
+                    final[str(user[0])][1][0][''+i+''] = user[2]
 
     return send_response(final)
+
+
+def index_to_type(index):
+    if index == 0:
+        return "day"
+    elif index == 1:
+        return "week"
+    elif index == 2:
+        return "month"
+    elif index == 3:
+        return "all"
+    else:
+        return None
 
 
 def execute_query(min=None, max=None, all=False):
@@ -47,9 +62,17 @@ def execute_query(min=None, max=None, all=False):
         cursor.execute(
             "SELECT u.id, u.username, sum(s.price + s.price * t.tva_value / 100) as 'Sell' "
             "from arlook.webservice_sell as s  inner join webservice_tva as t on s.tva_id = t.id  "
-            "inner join auth_user as u on s.user_id = u.id where s.date group by user_id")
+            "inner join auth_user as u on s.user_id = u.id group by user_id")
 
-    return cursor.fetchall()
+    results = cursor.fetchall()
+
+    if len(results) == 0:
+        cursor.execute(
+            "SELECT u.id, u.username from arlook.webservice_sell as s inner join auth_user as u on s.user_id = u.id group by user_id")
+
+        results = cursor.fetchall()
+
+    return results
 
 
 def get_typed_bilan(type, date=None):
@@ -87,4 +110,21 @@ def get_typed_bilan(type, date=None):
 '''
 #start = today - datetime.timedelta(days=today.day-1)
 #end = today + datetime.timedelta(days=monthrange(today.year, today.month)[1]-today.day)
+'''
+
+
+'''
+for arrays in all:
+            for user in arrays:
+                if not str(user[0]) in final:
+                    final[str(user[0])] = [user[1]]
+                    try:
+                        final[str(user[0])].append(user[2])
+                    except:
+                        final[str(user[0])].append("Pas de données")
+                else:
+                    try:
+                        final[str(user[0])].append(user[2])
+                    except:
+                        final[str(user[0])].append("Pas de données")
 '''
