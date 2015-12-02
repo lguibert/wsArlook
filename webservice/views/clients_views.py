@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import json
 from general_views import send_response, serialize
-from webservice.models import Client, LineClient, Visit
+from webservice.models import Client, LineClient, Visit, User
 from django.views.decorators.csrf import csrf_exempt
 
 date_format = "%d/%m/%Y"
@@ -63,11 +63,14 @@ def new_client(request):
         client = Client()
         client.client_firstname = newclient['firstname']
         client.client_lastname = newclient['lastname']
-        client.client_phone = newclient['phone']
-        client.client_address = newclient['address']
-        client.client_town = newclient['town']
-        client.client_zipcode = newclient['zipcode']
-        client.client_email = newclient['email']
+        try:
+            client.client_phone = newclient['phone']
+            client.client_address = newclient['address']
+            client.client_town = newclient['town']
+            client.client_zipcode = newclient['zipcode']
+            client.client_email = newclient['email']
+        except:
+            pass
 
         try:
             client.save()
@@ -118,6 +121,7 @@ def update_visit_client(request):
             client = Client.objects.get(client_uuid=uuid)
             v = Visit()
             v.client = client
+            v.user = User.objects.order_by("-last_login")[0]
             v.save()
             return send_response(True)
         except:

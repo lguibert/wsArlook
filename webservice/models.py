@@ -20,7 +20,7 @@ class Product(models.Model):
     prod_datebuy = models.DateField()
     prod_stock = models.IntegerField()
     prod_stock_store = models.IntegerField()
-    prod_image = models.TextField()
+    prod_image = models.TextField(null=True)
     active = models.BooleanField(default=True)
 
     tva = models.ForeignKey(TVA)
@@ -53,7 +53,8 @@ class Client(models.Model):
 
 class Visit(models.Model):
     visit_date = models.DateField(auto_now=True)
-    client = models.ForeignKey(Client, default=1)
+    client = models.ForeignKey(Client)
+    user = models.ForeignKey(User)
 
 
 class LineProduct(models.Model):
@@ -104,7 +105,6 @@ class Sell(models.Model):
     date = models.DateTimeField(auto_now=True)
     price = models.DecimalField(max_digits=6, decimal_places=2)
     qte = models.IntegerField()
-
 
 
 post_save.connect(create_line_product, sender=Product)

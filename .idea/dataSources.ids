@@ -662,13 +662,23 @@ model</columns>
         <mandatory>1</mandatory>
         <data-type>int(11)</data-type>
       </column>
-      <key id="170" parent="20" name="PRIMARY">
+      <column id="170" parent="20" name="user_id">
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+      </column>
+      <key id="171" parent="20" name="PRIMARY">
         <columns>id</columns>
         <primary>1</primary>
       </key>
-      <foreign-key id="171" parent="20" name="webservice_visit_client_id_54255056_fk_webservice_client_id">
+      <foreign-key id="172" parent="20" name="webservice_visit_client_id_54255056_fk_webservice_client_id">
         <columns>client_id</columns>
         <ref-key>webservice_client.PRIMARY</ref-key>
+        <cascade-update-rule>restrict</cascade-update-rule>
+        <cascade-delete-rule>restrict</cascade-delete-rule>
+      </foreign-key>
+      <foreign-key id="173" parent="20" name="webservice_visit_user_id_33e44240_fk_auth_user_id">
+        <columns>user_id</columns>
+        <ref-key>auth_user.PRIMARY</ref-key>
         <cascade-update-rule>restrict</cascade-update-rule>
         <cascade-delete-rule>restrict</cascade-delete-rule>
       </foreign-key>

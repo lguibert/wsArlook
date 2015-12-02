@@ -64,7 +64,6 @@ class Migration(migrations.Migration):
                 ('prod_datebuy', models.DateField()),
                 ('prod_stock', models.IntegerField()),
                 ('prod_stock_store', models.IntegerField()),
-                ('prod_lastmodification', models.DateTimeField(auto_now=True)),
                 ('prod_image', models.TextField()),
                 ('active', models.BooleanField(default=True)),
             ],
@@ -91,8 +90,10 @@ class Migration(migrations.Migration):
             name='Visit',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('visit_date', models.DateTimeField(auto_now=True)),
-                ('client', models.ForeignKey(default=1, to='webservice.Client')),
+                ('visit_date', models.DateField(auto_now=True)),
+                ('test', models.CharField(max_length=20)),
+                ('client', models.ForeignKey(to='webservice.Client')),
+                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
             ],
         ),
         migrations.AddField(

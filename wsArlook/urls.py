@@ -22,6 +22,7 @@ urlpatterns = patterns('webservice.views',
                        url(r'client/line/(?P<uuid>[a-zA-Z0-9]{1,})/?', 'line_client'),
                        url(r'client/(?P<uuid>[a-zA-Z0-9]{1,})/?', 'get_client'),
 
+                       url(r'bilan/visit/?', 'get_bilan_visit'),
                        url(r'bilan/?', 'get_bilan'),
 
                        url(r'login/?', 'login'),

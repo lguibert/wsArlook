@@ -56,7 +56,7 @@ def new_product(request):
             product.save()
             return send_response(True)
         except:
-            return send_response(False, 500)
+            return send_response("Problème lors de la sauvegarde du produit.", 500)
 
 
 @csrf_exempt
@@ -171,7 +171,9 @@ def update_stock_product_store(uuid, quantity, operation):
 
 def line_prod(request, uuid):
     prod = Product.objects.get(prod_uuid=uuid)
+    print prod.id
     linesprod = LineProduct.objects.filter(product_id=prod.id)
+    print linesprod
     lines = []
 
     for line in linesprod:
