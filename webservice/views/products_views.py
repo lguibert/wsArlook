@@ -22,9 +22,7 @@ def get_product(request, uuid):
            "prod_stock": product.prod_stock,
            "prod_stock_store": product.prod_stock_store,
            "prod_image": product.prod_image,
-           "prod_tva_value": str(product.tva.tva_value),
            "prod_uuid": str(product.prod_uuid),
-           "prod_tva": str(product.tva.tva_uuid)
            }
 
     return send_response(tab)
@@ -35,12 +33,6 @@ def new_product(request):
     if request.method == 'POST':
         newprod = json.loads(request.body)
 
-        try:
-            if not newprod['image']:
-                newprod['image'] = None
-        except:
-            newprod['image'] = None
-
         product = Product()
         product.prod_name = newprod['name']
         product.prod_sellprice = newprod['sellprice']
@@ -48,9 +40,6 @@ def new_product(request):
         product.prod_datebuy = newprod['datebuy'].split("T")[0]
         product.prod_stock = newprod['stock']
         product.prod_stock_store = newprod['stock_store']
-        product.prod_image = newprod['image']
-
-        product.tva_id = get_tva_uuid(newprod['tva'])
 
         try:
             product.save()
@@ -171,9 +160,7 @@ def update_stock_product_store(uuid, quantity, operation):
 
 def line_prod(request, uuid):
     prod = Product.objects.get(prod_uuid=uuid)
-    print prod.id
     linesprod = LineProduct.objects.filter(product_id=prod.id)
-    print linesprod
     lines = []
 
     for line in linesprod:

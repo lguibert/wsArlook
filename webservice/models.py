@@ -23,8 +23,6 @@ class Product(models.Model):
     prod_image = models.TextField(null=True)
     active = models.BooleanField(default=True)
 
-    tva = models.ForeignKey(TVA)
-
     def __unicode__(self):
         return self.prod_name
 
