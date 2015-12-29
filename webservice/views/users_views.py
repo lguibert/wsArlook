@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login as auth_login
 import json
 from webservice.models import User
 from django.contrib.auth.hashers import make_password
-from webservice.views.bilan_views import get_visited_bilan, index_to_type
+from webservice.views.bilan_views import get_visited_bilan, index_to_type, get_typed_bilan
 import datetime
 
 
@@ -73,7 +73,6 @@ def user_presta(request):
 
         try:
             if date is None:
-
                 visit_day = get_visited_bilan("day")
                 visit_week = get_visited_bilan("week")
                 visit_month = get_visited_bilan("month")
@@ -86,6 +85,39 @@ def user_presta(request):
                 visit_week = get_visited_bilan("week", date)
                 visit_month = get_visited_bilan("month", date)
                 visit_all = get_visited_bilan("all")
+                all = [visit_day, visit_week, visit_month, visit_all]
+
+            final = data_bilan_layout(all, user.id)
+
+            return send_response(final)
+        except:
+            return send_response("Erreur lors de la récupération des données.", 500)
+
+
+@csrf_exempt
+def user_sell(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        user = User.objects.get(username=data[0])
+        if data[1]:
+            date = datetime.datetime.strptime(data[1], '%Y-%m-%d')
+        else:
+            date = None
+
+        try:
+            if date is None:
+                visit_day = get_typed_bilan("day")
+                visit_week = get_typed_bilan("week")
+                visit_month = get_typed_bilan("month")
+                visit_all = get_typed_bilan("all")
+
+                all = [visit_day, visit_week, visit_month, visit_all]
+
+            else:
+                visit_day = get_typed_bilan("day", date)
+                visit_week = get_typed_bilan("week", date)
+                visit_month = get_typed_bilan("month", date)
+                visit_all = get_typed_bilan("all")
                 all = [visit_day, visit_week, visit_month, visit_all]
 
             final = data_bilan_layout(all, user.id)

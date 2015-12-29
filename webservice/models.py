@@ -51,6 +51,7 @@ class Client(models.Model):
 
 class Visit(models.Model):
     visit_date = models.DateField(auto_now=True)
+    value = models.DecimalField(max_digits=6, decimal_places=2)
     client = models.ForeignKey(Client)
     user = models.ForeignKey(User)
 

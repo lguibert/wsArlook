@@ -116,11 +116,14 @@ def line_client(request, uuid):
 @csrf_exempt
 def update_visit_client(request):
     if request.method == 'POST':
-        uuid = request.body
+        data = json.loads(request.body)
+        uuid = data[0]
+        value = data[1]
         try:
             client = Client.objects.get(client_uuid=uuid)
             v = Visit()
             v.client = client
+            v.value = value
             v.user = User.objects.order_by("-last_login")[0]
             v.save()
             return send_response(True)

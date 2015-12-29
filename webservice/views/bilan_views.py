@@ -5,6 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.db import connection
 from calendar import monthrange
 
+
 # ----------------------------------------             ----------------------------------------
 # ---------------------------------------- BILAN ----------------------------------------
 # ----------------------------------------             ----------------------------------------
@@ -73,21 +74,21 @@ def execute_bilan_query(min=None, max=None, all=False):
     cursor = connection.cursor()
     if not all:
         cursor.execute(
-            "SELECT u.id, u.username, sum(s.price + s.price * t.tva_value / 100) as 'Sell' "
-            "from arlook.webservice_sell as s  inner join webservice_tva as t on s.tva_id = t.id  "
-            "inner join auth_user as u on s.user_id = u.id where s.date between %s and %s group by user_id",
-            [min, max])
+                "SELECT u.id, u.username, sum(s.price * s.qte) as 'Sell' "
+                "from arlook.webservice_sell as s "
+                "inner join auth_user as u on s.user_id = u.id where s.date between %s and %s group by user_id",
+                [min, max])
     else:
         cursor.execute(
-            "SELECT u.id, u.username, sum(s.price + s.price * t.tva_value / 100) as 'Sell' "
-            "from arlook.webservice_sell as s  inner join webservice_tva as t on s.tva_id = t.id  "
-            "inner join auth_user as u on s.user_id = u.id group by user_id")
+                "SELECT u.id, u.username, sum(s.price * s.qte) AS 'Sell' "
+                "FROM arlook.webservice_sell AS s INNER JOIN auth_user AS u ON s.user_id = u.id GROUP BY user_id")
 
     results = cursor.fetchall()
 
     if len(results) == 0:
         cursor.execute(
-            "SELECT u.id, u.username from arlook.webservice_sell as s inner join auth_user as u on s.user_id = u.id group by user_id")
+                "SELECT u.id, u.username FROM arlook.webservice_sell AS s "
+                "INNER JOIN auth_user AS u ON s.user_id = u.id GROUP BY user_id")
 
         results = cursor.fetchall()
 
@@ -137,7 +138,7 @@ def get_bilan_visit(request):
         visit_all = get_visited_bilan("all")
         all = [visit_day, visit_week, visit_month, visit_all]
 
-        final = data_bilan_layout(all)
+        final = data_bilan_layout_visit(all)
 
         return send_response(final)
     else:
@@ -147,7 +148,7 @@ def get_bilan_visit(request):
         visit_all = get_visited_bilan("all")
         all = [visit_day, visit_week, visit_month, visit_all]
 
-        final = data_bilan_layout(all)
+        final = data_bilan_layout_visit(all)
 
     return send_response(final)
 
@@ -184,18 +185,40 @@ def execute_visit_query(min=None, max=None, all=False):
     cursor = connection.cursor()
     if not all:
         cursor.execute(
-            "SELECT u.id, u.username, count(v.id) from arlook.webservice_visit as v inner join auth_user as u on v.user_id = u.id where v.visit_date between %s and %s group by user_id",
-            [min, max])
+                "SELECT u.id, u.username, sum(v.value), count(v.id) from arlook.webservice_visit as v inner join auth_user as u on v.user_id = u.id where v.visit_date between %s and %s group by user_id",
+                [min, max])
     else:
         cursor.execute(
-            "SELECT u.id, u.username, count(v.id) from arlook.webservice_visit as v inner join auth_user as u on v.user_id = u.id  group by user_id")
+                "SELECT u.id, u.username, sum(v.value), count(v.id) FROM arlook.webservice_visit AS v INNER JOIN auth_user AS u ON v.user_id = u.id  GROUP BY user_id")
 
     results = cursor.fetchall()
 
     if len(results) == 0:
         cursor.execute(
-            "SELECT u.id, u.username from arlook.webservice_visit as v inner join auth_user as u on v.user_id = u.id group by user_id")
+                "SELECT u.id, u.username FROM arlook.webservice_visit AS v INNER JOIN auth_user AS u ON v.user_id = u.id GROUP BY user_id")
 
         results = cursor.fetchall()
 
     return results
+
+
+def data_bilan_layout_visit(all):
+    final = {}
+
+    for i, arrays in enumerate(all):
+        i = index_to_type(i)
+        for user in arrays:
+            print user
+            if not str(user[0]) in final:
+                final[str(user[0])] = [user[1], []]
+                try:
+                    final[str(user[0])][1].append({i: [user[2], user[3]]})
+                except IndexError:
+                    final[str(user[0])][1].append({i: "Rien"})
+            else:
+                try:
+                    final[str(user[0])][1][0]['' + i + ''] = [user[2], user[3]]
+                except IndexError:
+                    final[str(user[0])][1][0]['' + i + ''] = "Rien"
+
+    return final

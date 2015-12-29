@@ -61,9 +61,6 @@ def update_product(request):
         product.prod_datebuy = prod['prod_datebuy']
         product.prod_stock = prod['prod_stock']
         product.prod_stock_store = prod['prod_stock_store']
-        product.prod_image = prod['prod_image']
-
-        product.tva_id = get_tva_uuid(prod['prod_tva'])
 
         try:
             product.save()
@@ -116,7 +113,6 @@ def create_sell(product, quantity):
     sell = Sell()
     sell.user = User.objects.order_by("-last_login")[0]
     sell.product = product
-    sell.tva = TVA.objects.get(id=product.tva_id)
     sell.price = product.prod_sellprice
     sell.qte = quantity
     sell.save()

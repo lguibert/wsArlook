@@ -30,5 +30,6 @@ urlpatterns = patterns('webservice.views',
                        url(r'user/update/?', 'update_password'),
                        url(r'user/new/?', 'new_user'),
                        url(r'user/presta/?', 'user_presta'),
+                       url(r'user/sell/?', 'user_sell'),
 
                        )
