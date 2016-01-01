@@ -108,7 +108,7 @@ def line_client(request, uuid):
 
     for line in linescli:
         lines.append(
-            [line.action.action_name, line.user.username, line.date_modification.strftime(date_format + " à %H:%M:%S")])
+            [line.action.action_name, line.user.username, line.date_modification])
 
     return send_response(lines)
 
@@ -119,12 +119,13 @@ def update_visit_client(request):
         data = json.loads(request.body)
         uuid = data[0]
         value = data[1]
+        username = data[2]
         try:
             client = Client.objects.get(client_uuid=uuid)
             v = Visit()
             v.client = client
             v.value = value
-            v.user = User.objects.order_by("-last_login")[0]
+            v.user = User.objects.get(username=username)
             v.save()
             return send_response(True)
         except:

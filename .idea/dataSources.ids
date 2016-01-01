@@ -644,7 +644,6 @@ model</columns>
         <data-type>int(11)</data-type>
       </column>
       <column id="165" parent="18" name="tva_id">
-        <mandatory>1</mandatory>
         <data-type>int(11)</data-type>
       </column>
       <column id="166" parent="18" name="user_id">
@@ -726,25 +725,29 @@ model</columns>
         <mandatory>1</mandatory>
         <data-type>int(11)</data-type>
       </column>
-      <index id="184" parent="20" name="webservice_visit_client_id_54255056_fk_webservice_client_id">
+      <column id="184" parent="20" name="value">
+        <mandatory>1</mandatory>
+        <data-type>decimal(6,2)</data-type>
+      </column>
+      <index id="185" parent="20" name="webservice_visit_client_id_54255056_fk_webservice_client_id">
         <columns>client_id</columns>
         <desc-columns></desc-columns>
       </index>
-      <index id="185" parent="20" name="webservice_visit_user_id_33e44240_fk_auth_user_id">
+      <index id="186" parent="20" name="webservice_visit_user_id_33e44240_fk_auth_user_id">
         <columns>user_id</columns>
         <desc-columns></desc-columns>
       </index>
-      <key id="186" parent="20" name="PRIMARY">
+      <key id="187" parent="20" name="PRIMARY">
         <columns>id</columns>
         <primary>1</primary>
       </key>
-      <foreign-key id="187" parent="20" name="webservice_visit_client_id_54255056_fk_webservice_client_id">
+      <foreign-key id="188" parent="20" name="webservice_visit_client_id_54255056_fk_webservice_client_id">
         <columns>client_id</columns>
         <ref-key>~.webservice_client.PRIMARY</ref-key>
         <cascade-update-rule>restrict</cascade-update-rule>
         <cascade-delete-rule>restrict</cascade-delete-rule>
       </foreign-key>
-      <foreign-key id="188" parent="20" name="webservice_visit_user_id_33e44240_fk_auth_user_id">
+      <foreign-key id="189" parent="20" name="webservice_visit_user_id_33e44240_fk_auth_user_id">
         <columns>user_id</columns>
         <ref-key>~.auth_user.PRIMARY</ref-key>
         <cascade-update-rule>restrict</cascade-update-rule>

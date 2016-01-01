@@ -3,6 +3,7 @@ from django.http import HttpResponse
 import json
 from django.core import serializers
 import decimal
+import datetime
 
 
 def send_response(data, code=200):
@@ -19,4 +20,6 @@ def serialize(data):
 def decimal_default(obj):
     if isinstance(obj, decimal.Decimal):
         return float(obj)
+    elif isinstance(obj, datetime.datetime) or isinstance(obj, datetime.date):
+        return obj.isoformat()
     raise TypeError

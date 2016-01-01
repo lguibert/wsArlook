@@ -88,19 +88,19 @@ def in_product(request):
 def out_product(request):
     if request.method == "POST":
         data = json.loads(request.body)
-        if update_stock_product(data[0], data[1], "-"):
+        if update_stock_product(data[0], data[1], "-", data[2]):
             return send_response(True)
         else:
             return send_response("Erreur lors de la mise à jour du produit.", 500)
 
 
-def update_stock_product(uuid, quantity, operation):
+def update_stock_product(uuid, quantity, operation, username=None):
     try:
         prod = Product.objects.get(prod_uuid=uuid)
         if operation == "+":
             prod.prod_stock = int(prod.prod_stock) + int(quantity)
         elif operation == "-":
-            create_sell(prod, quantity)
+            create_sell(prod, quantity, username)
             prod.prod_stock = int(prod.prod_stock) - int(quantity)
 
         prod.save()
@@ -109,9 +109,9 @@ def update_stock_product(uuid, quantity, operation):
         return False
 
 
-def create_sell(product, quantity):
+def create_sell(product, quantity, username):
     sell = Sell()
-    sell.user = User.objects.order_by("-last_login")[0]
+    sell.user = User.objects.get(username=username)
     sell.product = product
     sell.price = product.prod_sellprice
     sell.qte = quantity
@@ -160,7 +160,8 @@ def line_prod(request, uuid):
     lines = []
 
     for line in linesprod:
+        print type(line.date_modification)
         lines.append(
-            [line.action.action_name, line.user.username, line.date_modification.strftime("%d/%m/%Y à %H:%M:%S")])
+            [line.action.action_name, line.user.username, line.date_modification])
 
     return send_response(lines)
