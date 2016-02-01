@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 import json
-from webservice.models import Product, LineProduct, Sell, User, TVA
+from webservice.models import Product, LineProduct, Sell, User, TypePay
 from django.views.decorators.csrf import csrf_exempt
 from general_views import send_response, serialize
-from tva_views import get_tva_uuid
 import datetime
 
 
@@ -88,19 +87,23 @@ def in_product(request):
 def out_product(request):
     if request.method == "POST":
         data = json.loads(request.body)
-        if update_stock_product(data[0], data[1], "-", data[2]):
+        print data
+        if not data[2] or int(data[2]) not in [1, 2, 3]:
+            data[2] = 3
+
+        if update_stock_product(data[0], data[1], "-", data[3], data[2]):
             return send_response(True)
         else:
             return send_response("Erreur lors de la mise à jour du produit.", 500)
 
 
-def update_stock_product(uuid, quantity, operation, username=None):
+def update_stock_product(uuid, quantity, operation, username=None, typePay=None):
     try:
         prod = Product.objects.get(prod_uuid=uuid)
         if operation == "+":
             prod.prod_stock = int(prod.prod_stock) + int(quantity)
         elif operation == "-":
-            create_sell(prod, quantity, username)
+            create_sell(prod, quantity, typePay, username)
             prod.prod_stock = int(prod.prod_stock) - int(quantity)
 
         prod.save()
@@ -109,12 +112,13 @@ def update_stock_product(uuid, quantity, operation, username=None):
         return False
 
 
-def create_sell(product, quantity, username):
+def create_sell(product, quantity, typePay, username):
     sell = Sell()
     sell.user = User.objects.get(username=username)
     sell.product = product
     sell.price = product.prod_sellprice
     sell.qte = quantity
+    sell.typepay = TypePay.objects.get(id=typePay)
     sell.save()
 
 

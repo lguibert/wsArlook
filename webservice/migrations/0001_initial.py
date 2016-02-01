@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.db import models, migrations
+from django.db import migrations, models
 from django.conf import settings
 import uuidfield.fields
 
@@ -64,7 +64,7 @@ class Migration(migrations.Migration):
                 ('prod_datebuy', models.DateField()),
                 ('prod_stock', models.IntegerField()),
                 ('prod_stock_store', models.IntegerField()),
-                ('prod_image', models.TextField()),
+                ('prod_image', models.TextField(null=True)),
                 ('active', models.BooleanField(default=True)),
             ],
         ),
@@ -91,7 +91,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('visit_date', models.DateField(auto_now=True)),
-                ('test', models.CharField(max_length=20)),
+                ('value', models.DecimalField(max_digits=6, decimal_places=2)),
                 ('client', models.ForeignKey(to='webservice.Client')),
                 ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
             ],
@@ -105,11 +105,6 @@ class Migration(migrations.Migration):
             model_name='sell',
             name='user',
             field=models.ForeignKey(to=settings.AUTH_USER_MODEL),
-        ),
-        migrations.AddField(
-            model_name='product',
-            name='tva',
-            field=models.ForeignKey(to='webservice.TVA'),
         ),
         migrations.AddField(
             model_name='lineproduct',

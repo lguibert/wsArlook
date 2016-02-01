@@ -49,11 +49,17 @@ class Client(models.Model):
         return self.client_firstname + " " + self.client_lastname
 
 
+class TypePay(models.Model):
+    name = models.CharField(max_length=50)
+
+
 class Visit(models.Model):
     visit_date = models.DateField(auto_now=True)
     value = models.DecimalField(max_digits=6, decimal_places=2)
     client = models.ForeignKey(Client)
     user = models.ForeignKey(User)
+
+    typepay = models.ForeignKey(TypePay)
 
 
 class LineProduct(models.Model):
@@ -104,6 +110,8 @@ class Sell(models.Model):
     date = models.DateTimeField(auto_now=True)
     price = models.DecimalField(max_digits=6, decimal_places=2)
     qte = models.IntegerField()
+
+    typepay = models.ForeignKey(TypePay)
 
 
 post_save.connect(create_line_product, sender=Product)

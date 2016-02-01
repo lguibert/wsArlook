@@ -85,9 +85,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'arlook',
-        'USER': 'arlook',
-        'PASSWORD': 'arlook',
-        'HOST': 'dev.lucasguibert.com',
+        'USER': 'root',
+        'PASSWORD': '',
+        'HOST': 'localhost',
         'PORT': '3306',
     }
 }

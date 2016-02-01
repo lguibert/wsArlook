@@ -214,11 +214,11 @@ def data_bilan_layout_visit(all):
                 try:
                     final[str(user[0])][1].append({i: [user[2], user[3]]})
                 except IndexError:
-                    final[str(user[0])][1].append({i: "Rien"})
+                    final[str(user[0])][1].append({i: ["Rien", 0]})
             else:
                 try:
                     final[str(user[0])][1][0]['' + i + ''] = [user[2], user[3]]
                 except IndexError:
-                    final[str(user[0])][1][0]['' + i + ''] = "Rien"
+                    final[str(user[0])][1][0]['' + i + ''] = ["Rien", 0]
 
     return final

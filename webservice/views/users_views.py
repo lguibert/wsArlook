@@ -146,4 +146,6 @@ def data_bilan_layout(all, user_id):
                 except (IndexError, KeyError):
                     final[f_user][1][0]['' + i + ''] = "Rien"
 
+    print final
+
     return final
