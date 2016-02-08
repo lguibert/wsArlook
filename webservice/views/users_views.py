@@ -100,6 +100,7 @@ def user_sell(request):
         data = json.loads(request.body)
         user = User.objects.get(username=data[0])
         if data[1]:
+            print data[1]
             date = datetime.datetime.strptime(data[1], '%Y-%m-%d')
         else:
             date = None

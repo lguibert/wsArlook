@@ -4,6 +4,8 @@ import datetime
 from django.views.decorators.csrf import csrf_exempt
 from django.db import connection
 from calendar import monthrange
+import json
+from webservice.models import User
 
 
 # ----------------------------------------             ----------------------------------------
@@ -130,30 +132,33 @@ def get_typed_bilan(type, date=None):
 @csrf_exempt
 def get_bilan_visit(request):
     if request.method == "POST":
-        date = datetime.datetime.strptime(request.body, '%Y-%m-%d')
+        data = json.loads(request.body)
+        id_user = User.objects.get(username=data[0]).id
+        date = data[1]
+        if date:
+            date = datetime.datetime.strptime(request.body, '%Y-%m-%d')
 
-        visit_day = get_visited_bilan("day", date)
-        visit_week = get_visited_bilan("week", date)
-        visit_month = get_visited_bilan("month", date)
-        visit_all = get_visited_bilan("all")
-        all = [visit_day, visit_week, visit_month, visit_all]
+            visit_day, typepay_day = get_visited_bilan("day", id_user, date)
+            visit_week, typepay_week = get_visited_bilan("week", id_user, date)
+            visit_month, typepay_month = get_visited_bilan("month", id_user, date)
+            visit_all, typepay_all = get_visited_bilan("all", id_user)
+            all = [visit_day, visit_week, visit_month, visit_all]
 
-        final = data_bilan_layout_visit(all)
+            final = data_bilan_layout_visit(all)
 
-        return send_response(final)
-    else:
-        visit_day = get_visited_bilan("day")
-        visit_week = get_visited_bilan("week")
-        visit_month = get_visited_bilan("month")
-        visit_all = get_visited_bilan("all")
-        all = [visit_day, visit_week, visit_month, visit_all]
+        else:
+            visit_day, typepay_day = get_visited_bilan("day", id_user)
+            visit_week, typepay_week = get_visited_bilan("week", id_user)
+            visit_month, typepay_month = get_visited_bilan("month", id_user)
+            visit_all, typepay_all = get_visited_bilan("all", id_user)
+            all = [visit_day, visit_week, visit_month, visit_all]
 
-        final = data_bilan_layout_visit(all)
+            final = data_bilan_layout_visit(all)
 
     return send_response(final)
 
 
-def get_visited_bilan(type, date=None):
+def get_visited_bilan(type, id_user, date=None):
     if not date:
         date = datetime.date.today()
 
@@ -161,24 +166,29 @@ def get_visited_bilan(type, date=None):
         today_min = datetime.datetime.combine(date, datetime.time.min)
         today_max = datetime.datetime.combine(date, datetime.time.max)
         visit_lines = execute_visit_query(today_min, today_max)
+        typepay = execute_typepay_query(id_user, today_min, today_max)
 
     elif type == "week":
         start = date - datetime.timedelta(days=date.weekday())
         end = date + datetime.timedelta(days=6 - date.weekday())
         visit_lines = execute_visit_query(start, end)
+        typepay = execute_typepay_query(id_user, start, end)
 
     elif type == "month":
         start = date - datetime.timedelta(days=date.day - 1)
         end = date + datetime.timedelta(days=monthrange(date.year, date.month)[1] - date.day)
         visit_lines = execute_visit_query(start, end)
+        typepay = execute_typepay_query(id_user, start, end)
 
     elif type == "all":
         visit_lines = execute_visit_query(all=True)
+        typepay = execute_typepay_query(id_user, all=True)
 
     else:
         visit_lines = None
+        typepay = None
 
-    return visit_lines
+    return visit_lines, typepay
 
 
 def execute_visit_query(min=None, max=None, all=False):
@@ -202,13 +212,36 @@ def execute_visit_query(min=None, max=None, all=False):
     return results
 
 
+def execute_typepay_query(id_user, min=None, max=None, all=False):
+    cursor = connection.cursor()
+    if not all:
+        cursor.execute(
+                "SELECT typepay_id, count(typepay_id) from webservice_visit where user_id = %s and visit_date between %s and %s group by typepay_id",
+                [id_user, min, max])
+    else:
+        cursor.execute(
+                "SELECT typepay_id, count(typepay_id) from webservice_visit where user_id = %s group by typepay_id", [id_user])
+
+    results = cursor.fetchall()
+
+    if len(results) == 0:
+        cursor.execute(
+                "SELECT u.id, u.username FROM arlook.webservice_visit AS v INNER JOIN auth_user AS u ON v.user_id = u.id GROUP BY user_id")
+
+        results = cursor.fetchall()
+
+    return results
+
+
+
+#SELECT typepay_id, count(typepay_id) as t1 from webservice_visit where user_id = 5 group by typepay_id
+
 def data_bilan_layout_visit(all):
     final = {}
 
     for i, arrays in enumerate(all):
         i = index_to_type(i)
         for user in arrays:
-            print user
             if not str(user[0]) in final:
                 final[str(user[0])] = [user[1], []]
                 try:
@@ -220,5 +253,9 @@ def data_bilan_layout_visit(all):
                     final[str(user[0])][1][0]['' + i + ''] = [user[2], user[3]]
                 except IndexError:
                     final[str(user[0])][1][0]['' + i + ''] = ["Rien", 0]
+
+    for f in final:
+
+        print "F: ", f
 
     return final
