@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import json
 from general_views import send_response, serialize
-from webservice.models import Client, LineClient, Visit, User
+from webservice.models import Client, LineClient, Visit, User, TypePay
 from django.views.decorators.csrf import csrf_exempt
 
 date_format = "%d/%m/%Y"
@@ -120,12 +120,14 @@ def update_visit_client(request):
         uuid = data[0]
         value = data[1]
         username = data[2]
+        typepay = data[3]
         try:
             client = Client.objects.get(client_uuid=uuid)
             v = Visit()
             v.client = client
             v.value = value
             v.user = User.objects.get(username=username)
+            v.typepay_id = typepay
             v.save()
             return send_response(True)
         except:
