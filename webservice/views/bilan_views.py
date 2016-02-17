@@ -283,8 +283,6 @@ def get_typepay_bilan_all(id_user=None, date=None):
 
         pays[id_user] = [typepay_day, typepay_week, typepay_month, typepay_all]
 
-    print pays
-
     return pays
 
 

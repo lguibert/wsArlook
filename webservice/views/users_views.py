@@ -187,6 +187,20 @@ def data_typepay_layout_visit(typespay, user_id):
                         if not typeid_to_name(3) in final[user_id][i]:
                             final[user_id][i][typeid_to_name(3)] = 0
 
-
-    print "FINAL: ", final
     return final
+
+
+@csrf_exempt
+def user_loginbilan(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        username = data[0]
+        password = data[1]
+
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            auth_login(request, user)
+            if user.is_superuser:
+                return send_response(True)
+        else:
+            return send_response("Erreur d'identifiant", 500)
