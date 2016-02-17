@@ -42,8 +42,6 @@ def get_bilan(request):
 def data_bilan_layout(all):
     final = {}
 
-    print all
-
     for i, arrays in enumerate(all):
         i = index_to_type(i)
         for user in arrays:
@@ -58,8 +56,6 @@ def data_bilan_layout(all):
                     final[str(user[0])][1][0]['' + i + ''] = user[2]
                 except IndexError:
                     final[str(user[0])][1][0]['' + i + ''] = 0
-
-    print final
 
     return final
 
@@ -143,12 +139,12 @@ def get_bilan_visit(request):
         if date:
             date = datetime.datetime.strptime(date, '%Y-%m-%d')
 
-            visit_day = get_visited_bilan("day", id_user, date)
-            visit_week = get_visited_bilan("week", id_user, date)
-            visit_month = get_visited_bilan("month", id_user, date)
+            visit_day = get_visited_bilan("day", id_user, date=date)
+            visit_week = get_visited_bilan("week", id_user, date=date)
+            visit_month = get_visited_bilan("month", id_user, date=date)
             visit_all = get_visited_bilan("all", id_user)
             all = [visit_day, visit_week, visit_month, visit_all]
-            typespay = get_typepay_bilan_all(date)
+            typespay = get_typepay_bilan_all(date=date)
 
             final = data_bilan_layout_visit(all)
             final_pay = data_typepay_layout_visit(typespay)
@@ -167,7 +163,7 @@ def get_bilan_visit(request):
     return send_response([final, final_pay])
 
 
-def get_visited_bilan(type, id_user, date=None):
+def get_visited_bilan(type, id_user=None, date=None):
     if not date:
         date = datetime.date.today()
 
@@ -243,17 +239,34 @@ def get_user_ids():
     return User.objects.all().values("id")
 
 
-def get_typepay_bilan_all(date=None):
+def get_typepay_bilan_all(id_user=None, date=None):
     if not date:
         date = datetime.date.today()
 
-    users = get_user_ids()
-
     pays = {}
 
-    for id in users:
-        id_user = str(id['id'])
+    if id_user is None:
+        users = get_user_ids()
 
+        for id in users:
+            id_user = str(id['id'])
+
+            today_min = datetime.datetime.combine(date, datetime.time.min)
+            today_max = datetime.datetime.combine(date, datetime.time.max)
+            typepay_day = execute_typepay_query(id_user, today_min, today_max)
+
+            start = date - datetime.timedelta(days=date.weekday())
+            end = date + datetime.timedelta(days=6 - date.weekday())
+            typepay_week = execute_typepay_query(id_user, start, end)
+
+            start = date - datetime.timedelta(days=date.day - 1)
+            end = date + datetime.timedelta(days=monthrange(date.year, date.month)[1] - date.day)
+            typepay_month = execute_typepay_query(id_user, start, end)
+
+            typepay_all = execute_typepay_query(id_user, all=True)
+
+            pays[id_user] = [typepay_day, typepay_week, typepay_month, typepay_all]
+    else:
         today_min = datetime.datetime.combine(date, datetime.time.min)
         today_max = datetime.datetime.combine(date, datetime.time.max)
         typepay_day = execute_typepay_query(id_user, today_min, today_max)
@@ -269,6 +282,8 @@ def get_typepay_bilan_all(date=None):
         typepay_all = execute_typepay_query(id_user, all=True)
 
         pays[id_user] = [typepay_day, typepay_week, typepay_month, typepay_all]
+
+    print pays
 
     return pays
 
@@ -298,7 +313,6 @@ def execute_typepay_query(id_user, min=None, max=None, all=False):
 def data_typepay_layout_visit(typespay):
     final = {}
     users = get_user_ids()
-
     for id in users:
         user_id = str(id['id'])
         for i, data in enumerate(typespay[user_id]):

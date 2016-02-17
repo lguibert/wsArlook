@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login as auth_login
 import json
 from webservice.models import User
 from django.contrib.auth.hashers import make_password
-from webservice.views.bilan_views import get_visited_bilan, index_to_type, get_typed_bilan
+from webservice.views.bilan_views import get_visited_bilan, index_to_type, get_typed_bilan, get_typepay_bilan_all, typeid_to_name
 import datetime
 
 
@@ -71,27 +71,30 @@ def user_presta(request):
         else:
             date = None
 
-        try:
-            if date is None:
-                visit_day = get_visited_bilan("day")
-                visit_week = get_visited_bilan("week")
-                visit_month = get_visited_bilan("month")
-                visit_all = get_visited_bilan("all")
+        #try:
+        if date is None:
+            visit_day = get_visited_bilan("day")
+            visit_week = get_visited_bilan("week")
+            visit_month = get_visited_bilan("month")
+            visit_all = get_visited_bilan("all")
+            pays = get_typepay_bilan_all(user.id)
 
-                all = [visit_day, visit_week, visit_month, visit_all]
+            all = [visit_day, visit_week, visit_month, visit_all]
 
-            else:
-                visit_day = get_visited_bilan("day", date)
-                visit_week = get_visited_bilan("week", date)
-                visit_month = get_visited_bilan("month", date)
-                visit_all = get_visited_bilan("all")
-                all = [visit_day, visit_week, visit_month, visit_all]
+        else:
+            visit_day = get_visited_bilan("day", date=date)
+            visit_week = get_visited_bilan("week", date=date)
+            visit_month = get_visited_bilan("month", date=date)
+            visit_all = get_visited_bilan("all")
+            pays = get_typepay_bilan_all(user.id, date=date)
+            all = [visit_day, visit_week, visit_month, visit_all]
 
-            final = data_bilan_layout(all, user.id)
+        final_pay = data_typepay_layout_visit(pays, user.id)
+        final = data_bilan_layout(all, user.id)
 
-            return send_response(final)
-        except:
-            return send_response("Erreur lors de la récupération des données.", 500)
+        return send_response([final, final_pay])
+        #except:
+        #    return send_response("Erreur lors de la récupération des données.", 500)
 
 
 @csrf_exempt
@@ -136,17 +139,54 @@ def data_bilan_layout(all, user_id):
         for user in arrays:
             f_user = str(user[0])
             if not f_user in final and f_user == str(user_id):
-                final[f_user] = [user[1], []]
+                final[f_user] = [user[1], user[0], []]
                 try:
-                    final[f_user][1].append({i: user[2]})
+                    final[f_user][2].append({i: user[2]})
                 except IndexError:
-                    final[f_user][1].append({i: "Rien"})
+                    final[f_user][2].append({i: "Rien"})
             elif f_user in final and f_user == str(user_id):
                 try:
-                    final[f_user][1][0]['' + i + ''] = user[2]
+                    final[f_user][2][0]['' + i + ''] = user[2]
                 except (IndexError, KeyError):
-                    final[f_user][1][0]['' + i + ''] = "Rien"
+                    final[f_user][2][0]['' + i + ''] = "Rien"
+    return final
 
-    print final
 
+def data_typepay_layout_visit(typespay, user_id):
+    final = {}
+    for i, data in enumerate(typespay[user_id]):
+        i = index_to_type(i)
+        for t in data:
+            if not user_id in final:
+                final[user_id] = {i: {}}
+                for d in t:
+                    try:
+                        final[user_id][i][typeid_to_name(d[2])] = d[3]
+                    except:
+                        pass
+                    if not typeid_to_name(1) in final[user_id][i]:
+                        final[user_id][i][typeid_to_name(1)] = 0
+                    if not typeid_to_name(2) in final[user_id][i]:
+                        final[user_id][i][typeid_to_name(2)] = 0
+                    if not typeid_to_name(3) in final[user_id][i]:
+                        final[user_id][i][typeid_to_name(3)] = 0
+            else:
+                    final[user_id][i] = {}
+                    for d in t:
+                        try:
+                            if not i in final[user_id]:
+                                final[user_id][i] = {typeid_to_name(d[2]): d[3]}
+                            else:
+                                final[user_id][i][typeid_to_name(d[2])] = d[3]
+                        except:
+                            pass
+                        if not typeid_to_name(1) in final[user_id][i]:
+                            final[user_id][i][typeid_to_name(1)] = 0
+                        if not typeid_to_name(2) in final[user_id][i]:
+                            final[user_id][i][typeid_to_name(2)] = 0
+                        if not typeid_to_name(3) in final[user_id][i]:
+                            final[user_id][i][typeid_to_name(3)] = 0
+
+
+    print "FINAL: ", final
     return final
